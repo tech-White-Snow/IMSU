@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import swal from "sweetalert";
 import { Button, TextField, Link } from "@material-ui/core";
 import { withRouter } from "./utils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateMyinfor } from "./redux/action/myInfor";
+import { updateOpen } from "./redux/action/modalAction";
 
 const axios = require("axios");
 const bcrypt = require("bcryptjs");
@@ -10,8 +12,11 @@ var salt = bcrypt.genSaltSync(10);
 
 
 function Login(props) {
+  const dispatch = useDispatch();
   const {users} = useSelector(state=>state.user); 
+  const {myInfor} = useSelector(state=>state); 
   const [user, setUser] = useState({
+      inVilid: false,
       email: '',
       password: ''
   });
@@ -41,13 +46,18 @@ function Login(props) {
     //     });
     //   }
     // });
-    users.forEach((user1, index)=>{
-      if(user1.email===user.email){
-        
+    users.forEach((user1, index) => {
+      if (user1.email === user.email && user1.password === user.password) {
+        //console.log(user1);
+        dispatch(updateMyinfor(user1));
         props.navigate("/dashboard");
-      };
-    })
-  }
+      }
+    });
+    setUser({ 
+      ...user,
+      inVilid: true
+    });
+  };
 
     return (
       <div className="login">
@@ -56,6 +66,7 @@ function Login(props) {
         </div>
 
         <div>
+          {user.inVilid ? <p className="invalid-text">Wrong email or password</p>:""}
           <TextField
             id="standard-basic"
             type="text"

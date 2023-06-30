@@ -2,7 +2,7 @@ const initialState = {
     name: "",
     email: "",
     gender: "",
-    role: "normal",
+    role: "",
     company: "",
     accountnumber: ""    
   };
@@ -10,10 +10,7 @@ const initialState = {
   const userReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'UPDATE_MYINFOR':
-        return {
-          ...state,
-          users: [...state.users, action.payload],
-        };
+        return action.payload;
       default:
         return state;
     }

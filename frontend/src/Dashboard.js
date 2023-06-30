@@ -1,12 +1,20 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 
 import { withRouter } from './utils';
 import DataTable from './component/DataTable';
+import UserTable from './component/UserTable';
+import { useSelector } from 'react-redux';
+import { Button } from '@material-ui/core';
+import CustomerTable from './component/CustomerTable';
 const axios = require('axios');
 
 function Dashboard() {
+  const {myInfor} = useSelector(state=>state)
+  const [activeButton, setActiveButton] = useState('data');
 
-
+  const handleButtonClick = (button) => {
+    setActiveButton(button);
+  };
   // useEffect() => {
   //   let token = localStorage.getItem('token');
   //   if (!token) {
@@ -20,8 +28,17 @@ function Dashboard() {
   // }
 
   return(
-    <div>
-      <DataTable />
+    <div className='dashboard'>
+      <div>
+          <div className='group-btn-dashboard'> 
+            <Button variant="contained" className='btn-dash' color="success" onClick={() => handleButtonClick('data')}>transactions</Button>
+            <Button variant="contained" className='btn-dash' color="success"onClick={() => handleButtonClick('customer')}>Customers</Button>
+            {myInfor.role != "normal" && <Button variant="contained" className='btn-dash' color="success"onClick={() => handleButtonClick('user')}>Users</Button>}
+          </div>
+      </div>
+      {activeButton === 'data' && <DataTable />}
+      {activeButton === 'customer' && <CustomerTable />}
+      {activeButton === 'user' && myInfor.role != "normal" && <UserTable />}
     </div>
   )
   // getProduct = () => {

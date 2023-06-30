@@ -5,10 +5,10 @@ export const addUser = (user) => {
     };
   };
   
-  export const updateUser = (userId, updatedUser) => {
+  export const updateUser = (updatedUser) => {
     return {
       type: 'UPDATE_USER',
-      payload: { userId, updatedUser },
+      payload: updatedUser,
     };
   };
   

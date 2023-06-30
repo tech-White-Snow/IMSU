@@ -28,18 +28,18 @@ const initialState = {
           ...state,
           transactions: [...state.transactions, action.payload],
         };
-      case 'DELETE_TRANSACTION':
-        let trans = [];
-        state.transactions.forEach((value, index) => {
-          if (index != action.payload) {
-            trans = [...trans, value];
-          }
-        });
-        // console.log(trans);
-        return {
-            ...state,
-            transactions:[   ...trans],
+    case 'DELETE_TRANSACTION':
+      let trans = [];
+      state.transactions.forEach((value, index) => {
+        if (index != action.payload) {
+          trans = [...trans, value];
         }
+      });
+      // console.log(trans);
+      return {
+          ...state,
+          transactions:[   ...trans],
+      }
     case 'UPDATE_TRANSACTION':
         let trans1 = [];
         state.transactions.forEach((value, index) => {

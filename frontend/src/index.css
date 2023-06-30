@@ -67,3 +67,20 @@ h2.modal-title{
   color: black;
   
 }
+
+p.invalid-text{
+  color: red;
+}
+
+.btn-dash{
+  margin: 50px!important;
+}
+
+.dashboard{
+  padding: 50px;
+}
+
+.group-btn-dashboard{
+  margin: auto;
+  text-align: center;
+}
