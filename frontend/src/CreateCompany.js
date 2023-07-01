@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
-import swal from "sweetalert";
 import { Button, TextField, Link, MenuItem } from "@material-ui/core";
 import { withRouter } from "./utils";
+import {BACKEND_URL} from "./constant"
 const axios = require("axios");
 
 const currencies = [
@@ -24,7 +24,8 @@ function Register(props) {
     email: '',
     gender: '',
     password: '',
-    confirm_password: ''
+    confirm_password: '',
+    errors: ''
   });
 
   const onChange = (e) => setStateInfor({ 
@@ -33,38 +34,31 @@ function Register(props) {
   );
 
   const register = () => {
-
-    axios.post('http://localhost:2000/register', {
+    axios.post(`${BACKEND_URL}/api/company`, {
       // username: stateInfor.username,
       // password: stateInfor.password,
       stateInfor
     }).then((res) => {
-      swal({
-        text: res.data.title,
-        icon: "success",
-        type: "success"
-      });
-      // this.props.history.push('/');
       this.props.navigate("/");
     }).catch((err) => {
-      swal({
-        text: err.response.data.errorMessage,
-        icon: "error",
-        type: "error"
-      });
+      setStateInfor({
+        ...stateInfor,
+        errors:'Failed registration. Please again...'
+      })
     });
   }
 
   return (
     <div className="register">
       <div>
-        <h1 className="register-text">Register Company</h1>
+        <h1 className="register-text login-text">Register Company</h1>
       </div>
 
       <div>
         <div>
           <h2 className="register-sep-text">Company Information</h2>
         </div>
+        
         <TextField
           id="standard-basic"
           className="login-input"
@@ -155,6 +149,7 @@ function Register(props) {
           required
         />
         <br /><br />
+        <p style={{color:'red'}}>{stateInfor.errors}</p>
         <Button
           className="button_style"
           variant="contained"

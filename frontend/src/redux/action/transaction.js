@@ -8,6 +8,14 @@
         payload: transaction
       });
   };
+
+  export const addTransactions = (transactions) =>(dispatch) => {
+    // ...
+    dispatch({
+        type: 'ADD_TRANSACTIONS',
+        payload: transactions
+      });
+  };
   
   export const updateTransaction = (updatedTransaction) => (dispatch) => {
     // ...

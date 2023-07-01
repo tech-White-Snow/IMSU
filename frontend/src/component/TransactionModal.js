@@ -4,6 +4,8 @@ import { useDispatch, useSelector, } from 'react-redux';
 import { updateOpen } from '../redux/action/modalAction';
 import { useState, useEffect } from 'react';
 import { addTransaction, updateTransaction } from '../redux/action/transaction'; 
+import {BACKEND_URL} from '../constant';
+const axios = require("axios");
 
 export default function BasicModal() {
   const dispatch = useDispatch();
@@ -27,8 +29,28 @@ export default function BasicModal() {
   };
 
   const updateTran=()=>{
-    if(modal.text == "UPDATE") dispatch(updateTransaction(state));
-    else dispatch(addTransaction(state));
+    if(modal.text == "UPDATE") {
+      axios.put(`${BACKEND_URL}/api/transaction/:${state.index}`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+        state
+      }).then((res) => {
+        dispatch(updateTransaction(state));
+      }).catch((err) => {
+        
+      });
+    }
+    else {
+      axios.post(`${BACKEND_URL}/api/transaction`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+        state
+      }).then((res) => {
+        dispatch(addTransaction(state));
+      }).catch((err) => {
+        
+      });
+    };
     handleClose();
   }
 

@@ -1,10 +1,15 @@
-export const addUser = (user) => {
+  export const addUser = (user) => {
     return {
       type: 'ADD_USER',
       payload: user,
     };
   };
-  
+  export const addUsers = (users) => {
+    return {
+      type: 'ADD_USERS',
+      payload: users,
+    };
+  };
   export const updateUser = (updatedUser) => {
     return {
       type: 'UPDATE_USER',

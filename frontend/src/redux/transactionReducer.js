@@ -28,38 +28,43 @@ const initialState = {
           ...state,
           transactions: [...state.transactions, action.payload],
         };
-    case 'DELETE_TRANSACTION':
-      let trans = [];
-      state.transactions.forEach((value, index) => {
-        if (index != action.payload) {
-          trans = [...trans, value];
-        }
-      });
-      // console.log(trans);
-      return {
+      case 'ADD_TRANSACTIONS':
+        return {
           ...state,
-          transactions:[   ...trans],
-      }
-    case 'UPDATE_TRANSACTION':
-        let trans1 = [];
+          transactions: [action.payload],
+        };
+      case 'DELETE_TRANSACTION':
+        let trans = [];
         state.transactions.forEach((value, index) => {
-            if (index != action.payload.index) {
-                trans1 = [...trans1, value];
-            }else{
-                let tran = {
-                    date: action.payload.date,
-                    amount: action.payload.amount,
-                    type: action.payload.type,
-                    description: action.payload.description
-                }
-                trans1 = [...trans1, tran];
-            }
+          if (index != action.payload) {
+            trans = [...trans, value];
+          }
         });
         // console.log(trans);
         return {
             ...state,
-            transactions:[   ...trans1],
+            transactions:[   ...trans],
         }
+      case 'UPDATE_TRANSACTION':
+          let trans1 = [];
+          state.transactions.forEach((value, index) => {
+              if (index != action.payload.index) {
+                  trans1 = [...trans1, value];
+              }else{
+                  let tran = {
+                      date: action.payload.date,
+                      amount: action.payload.amount,
+                      type: action.payload.type,
+                      description: action.payload.description
+                  }
+                  trans1 = [...trans1, tran];
+              }
+          });
+          // console.log(trans);
+          return {
+              ...state,
+              transactions:[   ...trans1],
+          }
       default:
         return state;
     }

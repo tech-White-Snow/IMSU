@@ -24,13 +24,16 @@ const initialState = {
   const customerReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'ADD_CUSTOMER':
-        
-        
         return {
           ...state,
           customers: [...state.customers, action.payload],
         };
-    case 'DELETE_CUSTOMER':
+      case 'ADD_CUSTOMERS':
+        return {
+          ...state,
+          customers: [action.payload],
+        };
+      case 'DELETE_CUSTOMER':
         let trans = [];
         state.customers.forEach((value, index) => {
             if (index != action.payload) {

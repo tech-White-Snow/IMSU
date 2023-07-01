@@ -1,10 +1,11 @@
 import * as React  from 'react';
-import {Box, Button, Typography, Modal, TextField} from "@material-ui/core";
+import {Button, Modal, TextField} from "@material-ui/core";
 import { useDispatch, useSelector, } from 'react-redux';
 import { updateOpen } from '../redux/action/modalAction';
 import { useState, useEffect } from 'react';
-import { addTransaction, updateTransaction } from '../redux/action/transaction'; 
 import { addUser, updateUser } from '../redux/action/userAction';
+import {BACKEND_URL} from '../constant';
+const axios = require("axios");
 
 export default function BasicModal() {
   const dispatch = useDispatch();
@@ -28,7 +29,17 @@ export default function BasicModal() {
   };
 
   const updateTran=()=>{
-    if(modal.text == "UPDATE") dispatch(updateUser(state));
+    if(modal.text == "UPDATE") {
+      axios.put(`${BACKEND_URL}/api/user/:${state.index}`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+        state
+      }).then((res) => {
+        dispatch(updateUser(state));
+      }).catch((err) => {
+        
+      });
+    }
     else dispatch(addUser(state));
     handleClose();
   }

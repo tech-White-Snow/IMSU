@@ -1,7 +1,9 @@
 import React, { Component, useState } from "react";
-import swal from "sweetalert";
 import { Button, TextField, Link, MenuItem } from "@material-ui/core";
 import { withRouter } from "./utils";
+import { useEffect } from "react";
+import { BACKEND_URL } from "./constant";
+
 const axios = require("axios");
 
 const currencies = [
@@ -15,25 +17,23 @@ const currencies = [
   },
 ];
 
-const companies = [
-  {
-    company: 'Amazon',
-    value: 0,
-  },
-  {
-    company: 'Microsoft',
-    value: 1,
-  },
-]
-
 const roles = [
-  {role:"admin", value:0}, 
-  {role:"manager", value:1},
-  {role:"normal", value:2}
+  {role:"admin", value:"admin"}, 
+  {role:"manager", value:"manager"},
+  {role:"normal", value:"normal"}
 ];
 
 function Register(props) {
-
+  const [companies, setCompanies] = useState([
+    {
+      company: 'Amazon',
+      account: "2222 22"
+    },
+    {
+      company: 'Microsoft',
+      account: "2222 22"
+    },
+  ]);
   const [stateInfor, setStateInfor] = useState({
     username: '',
     email: '',
@@ -41,44 +41,50 @@ function Register(props) {
     company: 0,
     role: '',
     password: '',
-    confirm_password: ''
+    confirm_password: '',
+    errors: 'd'
   });
+
+  useEffect(()=>{
+    axios.get(`${BACKEND_URL}/api/company`, {
+      
+    }).then((res) => {
+      setCompanies(res.data);
+    }).catch((err) => {
+      setStateInfor({
+        ...stateInfor,
+        errors:'No registered company. Please register company...'
+      })
+    });
+  },[])
 
   const onChange = (e) => setStateInfor({ 
     ...stateInfor,
     [e.target.name]: e.target.value }
   );
-
   const register = () => {
-
-    axios.post('http://localhost:2000/register', {
+    axios.post(`${BACKEND_URL}/api/user`, {
       // username: stateInfor.username,
       // password: stateInfor.password,
       stateInfor
     }).then((res) => {
-      swal({
-        text: res.data.title,
-        icon: "success",
-        type: "success"
-      });
-      // this.props.history.push('/');
       this.props.navigate("/");
     }).catch((err) => {
-      swal({
-        text: err.response.data.errorMessage,
-        icon: "error",
-        type: "error"
-      });
+      setStateInfor({
+        ...stateInfor,
+        errors:'Failed registration. Please again...'
+      })
     });
   }
 
   return (
     <div className="register">
       <div>
-        <h1 className="register-text">Register</h1>
+        <h1 className="register-text login-text">Register</h1>
       </div>
 
       <div>
+        <p style={{color:'red'}}>{stateInfor.errors}</p>
         <TextField
           id="standard-basic"
           className="login-input"
@@ -124,8 +130,8 @@ function Register(props) {
           defaultValue=""
           helperText="Please select your company"
         >
-          {companies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+          {companies.map((option, index) => (
+            <MenuItem key={index} value={index}>
               {option.company}
             </MenuItem>
           ))}
@@ -138,8 +144,8 @@ function Register(props) {
           defaultValue=""
           helperText="Please select your role"
         >
-          {roles.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+          {roles.map((option, index) => (
+            <MenuItem key={index} value={option.value}>
               {option.role}
             </MenuItem>
           ))}
@@ -174,7 +180,7 @@ function Register(props) {
           variant="contained"
           color="primary"
           size="small"
-          disabled={stateInfor.username == '' && stateInfor.password == ''}
+          disabled={stateInfor.username == '' || stateInfor.password != stateInfor.confirm_password}
           onClick={register}
         >
           Register

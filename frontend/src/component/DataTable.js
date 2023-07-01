@@ -2,9 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
 import TransactionModal from './TransactionModal';
+import SearchForm from './SearchForm';
+
 import { updateOpen } from '../redux/action/modalAction';
 import { updateModal } from '../redux/action/modalAction';
 import { addTransaction, deleteTransaction } from '../redux/action/transaction';
+import {BACKEND_URL} from '../constant';
+const axios = require("axios");
 
 
 function DataTable  () {
@@ -49,21 +53,22 @@ function DataTable  () {
     }
 
     const deleteTransact =(index) =>{
-      dispatch(deleteTransaction(index));
-      console.log(index)
+      axios.delete(`${BACKEND_URL}/api/transaction/:${index}`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+      }).then((res) => {
+        dispatch(deleteTransaction(index));
+      }).catch((err) => {
+        
+      });
     }
     return (
       <div>
-        {myInfor.role == "admin" ? <Button
-          variant="contained"
-          color="success"
-          onClick={addTransact}
-        >
-          Add Transaction
-        </Button>:''}
+        <SearchForm />
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Number</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Date</TableCell>
@@ -75,6 +80,7 @@ function DataTable  () {
           <TableBody>
             {transactions.map((item, index) => (
               <TableRow key={index}>
+                <TableCell>{index+1}</TableCell>
                 <TableCell>{item.amount}</TableCell>
                 <TableCell>{item.type}</TableCell>
                 <TableCell>{item.date}</TableCell>
@@ -82,6 +88,7 @@ function DataTable  () {
                       <Button 
                         variant="contained" 
                         color="success" 
+                        className='blue-btn'
                         onClick={()=>viewTransaction(index)}>
                           View
                       </Button>
@@ -90,6 +97,7 @@ function DataTable  () {
                       <Button 
                         variant="contained" 
                         color="success" 
+                        className='blue-btn'
                         onClick={()=>updateTransaction(index)}>
                           Update
                       </Button>
@@ -98,6 +106,7 @@ function DataTable  () {
                       <Button 
                         variant="contained" 
                         color="success"
+                        className='blue-btn'
                         onClick={()=>deleteTransact(index)}
                       >
                         Delete
@@ -108,6 +117,13 @@ function DataTable  () {
           </TableBody>
         </Table>
         <TransactionModal />
+        {myInfor.role == "admin" ? <Button
+          variant="contained"
+          className="add-member-button  blue-btn"
+          onClick={addTransact}
+        >
+          Add Transaction
+        </Button>:''}
       </div>
     );
   };

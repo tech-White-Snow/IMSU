@@ -6,6 +6,7 @@ const initialState = {
             gender: "Female",
             role: "admin", 
             company: "www",
+            company_id: 0,
             accountnumber: "2023 1231 1122 1123 5",
             password: "123456"   
         },
@@ -15,6 +16,7 @@ const initialState = {
             gender: "Male",
             role: "manager",  
             company: "www",
+            company_id: 0,
             accountnumber: "2023 1231 1122 1123 5", 
             password: "123456"
         },
@@ -24,6 +26,7 @@ const initialState = {
             gender: "Male",
             role: "normal", 
             company: "www",
+            company_id: 0,
             accountnumber: "2023 1231 1122 1123 5",
             password: "123456"
         },
@@ -36,6 +39,11 @@ const initialState = {
         return {
           ...state,
           users: [...state.users, action.payload],
+        };
+      case 'ADD_USERS':
+        return {
+          ...state,
+          users: [action.payload],
         };
       case 'DELETE_USER':
         let trans = [];

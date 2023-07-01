@@ -4,6 +4,8 @@ import { useDispatch, useSelector, } from 'react-redux';
 import { updateOpen } from '../redux/action/modalAction';
 import { useState, useEffect } from 'react';
 import { addCustomer, updateCustomer } from '../redux/action/customerAction';
+import {BACKEND_URL} from '../constant';
+const axios = require("axios");
 
 export default function BasicModal() {
   const dispatch = useDispatch();
@@ -27,8 +29,28 @@ export default function BasicModal() {
   };
 
   const updateTran=()=>{
-    if(modal.text == "UPDATE") dispatch(updateCustomer(state));
-    else dispatch(addCustomer(state));
+    if(modal.text == "UPDATE") {
+      axios.put(`${BACKEND_URL}/api/customer/:${state.index}`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+        state
+      }).then((res) => {
+        dispatch(updateCustomer(state));
+      }).catch((err) => {
+        
+      });
+    }
+    else {
+      axios.post(`${BACKEND_URL}/api/customer`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+        state
+      }).then((res) => {
+        dispatch(addCustomer(state));
+      }).catch((err) => {
+        
+      });
+    };
     handleClose();
   }
 

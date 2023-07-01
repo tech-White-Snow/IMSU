@@ -2,9 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Table, TableHead, TableRow, TableCell, TableBody, Button } from "@material-ui/core";
 import UserModal from './UserModal';
+import SearchForm from './SearchForm';
+
 import { updateOpen } from '../redux/action/modalAction';
 import { updateModal } from '../redux/action/modalAction';
 import { deleteUser } from '../redux/action/userAction';
+import {BACKEND_URL} from '../constant';
+const axios = require("axios");
 
 
 function UserTable  () {
@@ -45,17 +49,27 @@ function UserTable  () {
         index,
         ...users[index]
       }
+      
       dispatch(updateModal(data));
     }
 
     const deleteuser =(index) =>{
-      dispatch(deleteUser(index));
+      axios.delete(`${BACKEND_URL}/api/user/:${index}`, {
+        // username: stateInfor.username,
+        // password: stateInfor.password,
+      }).then((res) => {
+        dispatch(deleteUser(index));
+      }).catch((err) => {
+        
+      });
     }
     return (
       <div>
+        <SearchForm />
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Number</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Gender</TableCell>
@@ -68,6 +82,7 @@ function UserTable  () {
           <TableBody>
             {users.map((item, index) => (
               <TableRow key={index}>
+                <TableCell>{index+1}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.gender}</TableCell>
@@ -76,6 +91,7 @@ function UserTable  () {
                       <Button 
                         variant="contained" 
                         color="success" 
+                        className='blue-btn'
                         onClick={()=>viewTransaction(index)}>
                           View
                       </Button>
@@ -84,6 +100,7 @@ function UserTable  () {
                       <Button 
                         variant="contained" 
                         color="success" 
+                        className='blue-btn'
                         onClick={()=>updateTransaction(index)}>
                           Update
                       </Button>
@@ -92,6 +109,7 @@ function UserTable  () {
                       <Button 
                         variant="contained" 
                         color="success"
+                        className='blue-btn'
                         onClick={()=>deleteuser(index)}
                       >
                         Delete

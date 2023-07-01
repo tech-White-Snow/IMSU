@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import Login from "./Login";
 import CreateCompany from './CreateCompany'
 import Register from "./Register";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dash/Dashboard";
 import "./index.css";
 
 import store from "./redux/store";
@@ -20,6 +20,7 @@ ReactDOM.render(
         <Route path="/register" element={<Register />} />
         <Route path="/createcompany" element={<CreateCompany />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>
     </BrowserRouter>
   </Provider>,

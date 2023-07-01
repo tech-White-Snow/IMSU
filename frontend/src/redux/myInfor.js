@@ -4,6 +4,7 @@ const initialState = {
     gender: "",
     role: "",
     company: "",
+    company_id:"",
     accountnumber: ""    
   };
   
