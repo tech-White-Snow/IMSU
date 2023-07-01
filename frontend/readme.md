@@ -1,24 +1,29 @@
-Open your terminal or command prompt.
+
+## Quick start
+
+- Make sure your Node.js and npm versions are up to date for `React 18`
+
+- Install dependencies: `npm install` or `yarn`
+
+- Start the server: `npm run dev` or `yarn dev`
+
+- Views are on: `http://localhost:3000`
+
+## Login
+
+you can login in 3 levels of role.
+
+admin:   email: admin@example.com
+         password: 123456
+
+manager: email: manager@example.com
+         password: 123456
+
+normal:  email: normal@example.com
+         password: 123456
 
 
-Once you are in the project directory(named client),
-
-Install the npm pakage:
-
-command "npm install"
-
-start the development server by running the following command:
-
-command "npm start"
-
-This command will start the development server and automatically open your React application in your default browser.
+## File Structure
 
 
-you can login in three method(admin, normal, manager)
 
-admin; email: admin@example.com
-       password: 123456
-manager; email: manager@example.com
-       password: 123456
-normal; email: normal@example.com
-       password: 123456
