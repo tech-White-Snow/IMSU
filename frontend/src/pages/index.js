@@ -34,7 +34,7 @@ const Page = () => {
       </title>
     </Head>
     {console.log(Alerts)}
-    <Alert severity="error">{Alerts.error}</Alert>
+    {Alerts.error != ''? <Alert severity="error">{Alerts.error}</Alert>:''}
     <Box
       component="main"
       sx={{
@@ -48,9 +48,11 @@ const Page = () => {
         sx={{
           display: 'inline-flex',
           marginLeft: `50px`,
+          marginBottom: '10px'
         }}
       >
-        {MyInfor.company} 
+        Microsoft
+        {/* {MyInfor.company}  */}
       </Typography>:''}
     
       <Container maxWidth="xl">
