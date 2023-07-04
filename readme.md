@@ -16,3 +16,9 @@
     must setting role as Admin, Manager, Normal....
     email is unique
 -login
+
+
+-API Documentation
+
+   you can go to swagger ui page 
+          "http://95.217.55.215:5000" or if you run project in your local computer, "http://localhost:5000"
