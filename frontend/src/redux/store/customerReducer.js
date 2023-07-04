@@ -82,12 +82,13 @@ const initialState = {
       case 'ADD_CUSTOMERS':
         return {
           ...state,
-          customers: [action.payload],
+          customers: action.payload,
         };
       case 'DELETE_CUSTOMER':
         let trans = [];
         state.customers.forEach((value, index) => {
-            if (index != action.payload) {
+          console.log("object")
+            if (value._id != action.payload) {
                 trans = [...trans, value];
             }
         });

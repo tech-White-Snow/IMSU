@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import {useMemo} from 'react';
 import { format } from 'date-fns';
 import {
   Avatar,
@@ -21,11 +22,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateEmployee } from 'src/redux/action/modal';
 import { addEmployees } from 'src/redux/action/information';
 import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
+import { useState } from 'react';
+import { applyPagination } from 'src/utils/apply-pagination';
 
 export const EmployeesTable = (props) => {
-  const {
+  let {
     count = 0,
-    items = [],
+    //items = [],
     onDeselectAll,
     onDeselectOne,
     onPageChange = () => {},
@@ -36,6 +40,16 @@ export const EmployeesTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
+
+  const items = useSelector(state=>state.users.users);
+  const useCustomers = (data, page, rowsPerPage) => {
+    return useMemo(
+      () => {
+        return applyPagination(data, page, rowsPerPage);
+      },
+      [page, rowsPerPage]
+    );
+  };
   
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
@@ -46,14 +60,13 @@ export const EmployeesTable = (props) => {
   const handleModal=(action, employee, index)=>{
     let modal = {
       text: action,
-      id: index,
       open: true,
       ...employee
     }
     dispatch(updateEmployee(modal));
   }
 
-  const deleteHandle=(index)=>{
+  const deleteHandle=async(index)=>{
     // axios.delete(`${process.env.SERVER_URL}/api/users/${index}`)
     //   .then((res) => {
     //     dispatch(addEmployees(res.data));
@@ -62,6 +75,19 @@ export const EmployeesTable = (props) => {
     //     // Handle any errors that occur during the request
     //     console.error(err);
     //   });
+    try {
+   
+      const res = await axios.delete(`${BACKEND_URL}/api/users/${index}`);
+                  
+      console.log("object")
+      const employees = res.data;
+      dispatch(addEmployees(employees));
+    
+      handleClose();
+    }
+    catch(err) {
+        if(!err) console.log(err);
+      };
   }
   return (
     <Card>
@@ -101,12 +127,13 @@ export const EmployeesTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {console.log(items)}
               {items.map((Employee,index) => {
                 const isSelected = selected.includes(Employee.id);
                 return (
                   <TableRow
                     hover
-                    key={Employee.id}
+                    key={index}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
@@ -193,7 +220,7 @@ export const EmployeesTable = (props) => {
                           padding: "0px",
                           margin: "5px"
                         }}
-                        onClick={()=>deleteHandle(index+page*rowsPerPage)}
+                        onClick={()=>deleteHandle(Employee._id)}
                       >
                             Delete
                       </Button>:"":''}

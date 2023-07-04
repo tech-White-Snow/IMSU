@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import { Button, Modal, Box, TextField, FormControl, InputLabel, Select, MenuItem,Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeTransaction } from 'src/redux/action/modal';
+import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
+import { addTransactions } from 'src/redux/action/information';
+import { useRouter } from 'next/router';
 
 const TransactionModal = () =>{
   const dispatch = useDispatch();
+  const router = useRouter();
   const {transaction} = useSelector(state=>state.modal);
   const [formValues, setFormValues] = useState({transaction
   });
@@ -20,25 +25,32 @@ const TransactionModal = () =>{
   }, [transaction])
 
   const handleUpdate=(e)=>{
-    // if(!e){
-    // axios.put(`${process.env.SERVER_URL}/api/transactions/${formValues.id}`)
-//   .then((res) => {
-//     dispatch(addTransactions(res.data));
-//   })
-//   .catch((err) => {
-//     // Handle any errors that occur during the request
-//     console.error(err);
-//   });
-    // }else{
-          // axios.post(`${process.env.SERVER_URL}/api/transactions/`, formValues)
-          //   .then((res) => {
-          //     dispatch(addTransactions(res.data));
-          //   })
-          //   .catch((err) => {
-          //     // Handle any errors that occur during the request
-          //     console.error(err);
-          //   });
-   // }
+    if(!e){
+
+      axios.put(`${BACKEND_URL}/api/transactions/${formValues._id}`, formValues)
+              .then((res) => {
+                dispatch(addTransactions(res.data));
+                handleClose();
+                router.push('/transactions');
+              })
+              .catch((err) => {
+                // Handle any errors that occur during the request
+                console.error(err);
+              });
+      }else{
+       console.log("object")
+            axios.post(`${BACKEND_URL}/api/transactions/`, formValues)
+              .then((res) => {
+                dispatch(addTransactions(res.data));
+                handleClose();
+                router.push('/transactions');
+                
+              })
+              .catch((err) => {
+                // Handle any errors that occur during the request
+                console.error(err);
+              });
+     }
   }
 
   const handleChange = (event) => {

@@ -85,7 +85,7 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                IM Serve
+                Constantinople
               </Box>
             </Typography>
             <Typography
@@ -97,7 +97,7 @@ export const Layout = (props) => {
             </Typography>
             <img
               alt=""
-              src="/assets/auth-illustration.svg"
+              //src="/assets/auth-illustration.svg"
             />
           </Box>
         </Grid>

@@ -10,6 +10,8 @@ import {
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
 
 const states = [
   {
@@ -44,6 +46,23 @@ export const AccountProfileDetails = () => {
     []
   );
 
+  const handleProfile=async()=>{
+    try {
+      
+      const res = await axios.put(`${BACKEND_URL}/api/users/${values._id}`, values);
+      
+      localStorage.setItem('user', JSON.stringify(values));
+
+      // const employees = res.data;
+      // dispatch(addEmployees(employees));
+    
+      // handleClose();
+    }
+  catch(err) {
+      if(!err) console.log(err);
+    };
+  }
+
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
@@ -68,7 +87,7 @@ export const AccountProfileDetails = () => {
               container
               spacing={3}
             >
-              <Grid
+              {/* <Grid
                 xs={12}
                 md={6}
               >
@@ -81,7 +100,7 @@ export const AccountProfileDetails = () => {
                   required
                   value={values.name}
                 />
-              </Grid>
+              </Grid> */}
               <Grid
                 xs={12}
                 md={6}
@@ -114,10 +133,10 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="address"
+                  label="Address"
                   name="address"
                   onChange={handleChange}
-                  type="number"
+                  required
                   value={values.address}
                 />
               </Grid>
@@ -127,7 +146,7 @@ export const AccountProfileDetails = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
+          <Button variant="contained" onClick={handleProfile}>
             Save details
           </Button>
         </CardActions>

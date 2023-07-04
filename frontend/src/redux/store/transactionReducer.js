@@ -34,9 +34,9 @@ const initialState = {
       case 'ADD_TRANSACTIONS':
         return {
           ...state,
-          transactions: [action.payload],
+          transactions: action.payload,
         };
-      case 'DELETE_TRANSACTION':
+      case 'DELETE_Transaction':
         let trans = [];
         state.transactions.forEach((value, index) => {
           if (index != action.payload) {

@@ -17,6 +17,7 @@ export const updateEmployee = (infor) => (dispatch) => {
   };
   export const updateTransaction = (infor) => (dispatch) => {
     // ...
+    console.log("object")
     dispatch({
         type: 'UPDATE_MTRANSACTION',
         payload: infor

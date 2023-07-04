@@ -46,7 +46,7 @@ const initialState = {
       case 'ADD_EMPLOYEES':
         return {
           ...state,
-          users: [action.payload],
+          users: action.payload,
         };
       case 'DELETE_USER':
         let trans = [];
@@ -79,8 +79,10 @@ const initialState = {
           // console.log(trans);
           return {
               ...state,
-              users:[   ...trans1],
+              users:[ ...trans1],
           }
+      case 'UPDATE_USERS':
+        return state;
       default:
         return state;
     }

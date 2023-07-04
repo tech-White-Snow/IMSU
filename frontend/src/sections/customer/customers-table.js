@@ -19,12 +19,14 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCustomer } from 'src/redux/action/modal';
-import { addCustomers } from 'src/redux/action/information';
+import { addCustomers ,deleteCustomer} from 'src/redux/action/information';
+import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
 
 export const CustomersTable = (props) => {
   const {
     count = 0,
-    items = [],
+    //items = [],
     onDeselectAll,
     onDeselectOne,
     onPageChange = () => {},
@@ -35,6 +37,7 @@ export const CustomersTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
+  const items = useSelector(state=>state.customers.customers);
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
@@ -46,13 +49,12 @@ export const CustomersTable = (props) => {
     let modal = {
       text: action,
       open: true,
-      id: index,
       ...customer
     }
     
     dispatch(updateCustomer(modal));
   }
-  const deleteHandle=(index)=>{
+  const deleteHandle=async(index)=>{
     // axios.delete(`${process.env.SERVER_URL}/api/customers/${index}`)
     //   .then((res) => {
     //     dispatch(addCustomers(res.data));
@@ -61,6 +63,17 @@ export const CustomersTable = (props) => {
     //     // Handle any errors that occur during the request
     //     console.error(err);
     //   });
+    try {
+
+      const res = await axios.delete(`${BACKEND_URL}/api/customers/${index}`);
+                  
+      console.log("object")
+      const employees = res.data;
+      dispatch(addCustomers(employees));
+    }
+    catch(err) {
+        if(!err) console.log(err);
+      };
   }
   return (
     <Card>
@@ -102,7 +115,7 @@ export const CustomersTable = (props) => {
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={index}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
@@ -186,7 +199,7 @@ export const CustomersTable = (props) => {
                           padding: "0px",
                           margin: "5px"
                         }}
-                        onClick={()=>deleteHandle(index+page*rowsPerPage)}
+                        onClick={()=>deleteHandle(customer._id)}
                       >
                             Delete
                       </Button>:"":''}

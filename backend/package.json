@@ -12,6 +12,8 @@
   "author": "Glen Sørbø",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.363.0",
+    "aws-sdk": "^2.1409.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.2.4",
     "cors": "^2.8.5",
@@ -20,7 +22,11 @@
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.3",
-    "request": "^2.88.0"
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "request": "^2.88.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
     "concurrently": "^5.0.2",

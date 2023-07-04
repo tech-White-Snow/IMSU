@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -13,6 +13,9 @@ import { applyPagination } from 'src/utils/apply-pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomerModal from 'src/modal/customerModal';
 import { updateCustomer } from 'src/redux/action/modal';
+import { BACKEND_URL } from 'src/Constant';
+import axios from 'axios';
+import { addCustomers } from 'src/redux/action/information';
 
 const now = new Date();
 
@@ -37,6 +40,7 @@ const now = new Date();
 const Page = () => {
   const dispatch = useDispatch();
   const data = useSelector(state=>state.customers.customers);
+
   let MyInfor = JSON.parse(localStorage.getItem("user"));
   const useCustomers = (page, rowsPerPage) => {
     return useMemo(
@@ -46,7 +50,6 @@ const Page = () => {
       [page, rowsPerPage]
     );
   };
-
   const useCustomerIds = (customers) => {
     return useMemo(
       () => {
@@ -58,11 +61,25 @@ const Page = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
+  let customers = useCustomers(page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
   const {customer} = useSelector(state=>state.modal);
+
+  useEffect(()=>{
+    async function fetchData(){try {
+     
+      const res = await axios.get(`${BACKEND_URL}/api/customers`);
+
+      const customer = res.data;
+      dispatch(addCustomers(customer));
+    }
+    catch(err) {
+      if(!err) console.log(err);
+    };}
+    fetchData();
+  }, [])
 
   const handleAdd=()=>{
     let cus = {

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -8,12 +8,13 @@ import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/materia
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { applyPagination } from 'src/utils/apply-pagination';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { EmployeesTable } from 'src/sections/employee/employees';
 import { EmployeesSearch } from 'src/sections/employee/employees-search';
 import EmployeeModal from 'src/modal/employModal';
 import axios from 'axios';
-
+import { BACKEND_URL } from 'src/Constant';
+import { addEmployees } from 'src/redux/action/information';
 
 const now = new Date();
 
@@ -36,9 +37,36 @@ const now = new Date();
 // ];
 
 const Page = () => {
+  const dispatch = useDispatch();
   const data = useSelector(state=>state.users.users);
+  const [data1, setData] = useState([
+    {
+      id: 1,
+      name: "Hans Schmidt",
+      email: "manager@example.com",
+      gender: "Male",
+      role: "Manager",  
+      company: "Microsoft",
+      company_id:"",
+      avatar: '/assets/avatars/avatar-miron-vitold.png',
+      password: "123456"
+  },
+  {
+      id: 2,
+      name: "Markus Wagner",
+      email: "normal@example.com",
+      gender: "Male",
+      role: "Normal", 
+      company: "Microsoft",
+      company_id:"",
+      avatar: '/assets/avatars/avatar-fran-perez.png',
+      password: "123456"
+  },
+  ])
+ 
+  
   let MyInfor = JSON.parse(localStorage.getItem("user"));
-  const useCustomers = (page, rowsPerPage) => {
+  const useCustomers = ( page, rowsPerPage) => {
     return useMemo(
       () => {
         return applyPagination(data, page, rowsPerPage);
@@ -46,6 +74,26 @@ const Page = () => {
       [page, rowsPerPage]
     );
   };
+  
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [customers, setCustomers] = useState(useCustomers( page, rowsPerPage));
+  useEffect(()=>{
+    async function fetchData(){try {
+      const res = await axios.get(`${BACKEND_URL}/api/users`);
+      
+      const employees = res.data;
+      dispatch(addEmployees(employees))
+      // console.log(res)
+      setData(employees);
+      setCustomers(useCustomers(page, rowsPerPage));
+    }
+    catch(err) {
+      if(!err) console.log(err);
+    };}
+    fetchData();
+  }, [])
+
 
   const useCustomerIds = (customers) => {
     return useMemo(
@@ -56,9 +104,7 @@ const Page = () => {
     );
   };
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
+  
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
   // const [modalData, setModal] = useState({
@@ -69,6 +115,7 @@ const Page = () => {
   //   address:"",
   //   role:"",
   // });
+
 
   // const  closeModal=()=>{
   //   setModal({

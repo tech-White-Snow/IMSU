@@ -19,13 +19,15 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateTransaction } from 'src/redux/action/modal';
-import { addTransactions } from 'src/redux/action/information';
+import { addTransactions, deleteTransactions } from 'src/redux/action/information';
 import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
+import { useEffect } from 'react';
 
 export const TransactionsTable = (props) => {
   const {
     count = 0,
-    items = [],
+    //items = [],
     onDeselectAll,
     onDeselectOne,
     onPageChange = () => {},
@@ -36,31 +38,37 @@ export const TransactionsTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
+  const items = useSelector(state=>state.transactions.transactions);
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
 
   let MyInfor = JSON.parse(localStorage.getItem("user"));
-
+ 
+  useEffect(()=>{
+    //console.log(items)
+  },[])
   const dispatch = useDispatch();
   const handleModal=(action, transaction, index)=>{
     let tran = {
       text: action,
       open: true,
-      id: index,
       ...transaction
     }
     dispatch(updateTransaction(tran));
   }
-  const deleteHandle=(index)=>{
-    // axios.delete(`${process.env.SERVER_URL}/api/transactions/${index}`)
-    //   .then((res) => {
-    //     dispatch(addTransactions(res.data));
-    //   })
-    //   .catch((err) => {
-    //     // Handle any errors that occur during the request
-    //     console.error(err);
-    //   });
+  const deleteHandle=async(index)=>{
+    try {
+      const res = await axios.delete(`${BACKEND_URL}/api/transactions/${index}`);
+                  
+      // console.log("object")
+      const employees = res.data;
+
+      dispatch(addTransactions(employees));
+    }
+    catch(err) {
+        if(!err) console.log(err);
+      };
   }
   return (
     <Card>
@@ -97,12 +105,13 @@ export const TransactionsTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
+              {/* {console.log(items)} */}
               {items.map((Transaction, index) => {
                 const isSelected = selected.includes(Transaction.id);
                 return (
                   <TableRow
                     hover
-                    key={Transaction.id}
+                    key={index}
                     selected={isSelected}
                   >
                     <TableCell padding="checkbox">
@@ -154,7 +163,7 @@ export const TransactionsTable = (props) => {
                         }}
                         onClick={()=>handleModal("view", Transaction,index+page*rowsPerPage)}
                       >
-                            Detailed
+                            View
                       </Button>
                       {MyInfor!=null? MyInfor.role != "Normal" ? <Button
                         variant="contained"
@@ -184,7 +193,7 @@ export const TransactionsTable = (props) => {
                           padding: "0px",
                           margin: "5px"
                         }}
-                        onClick={()=>deleteHandle(index+page*rowsPerPage)}
+                        onClick={()=>deleteHandle(Transaction._id)}
                       >
                             Delete
                       </Button>:"":''}

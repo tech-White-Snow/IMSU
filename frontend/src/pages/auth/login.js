@@ -19,10 +19,12 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { useSelector } from 'react-redux';
-import { updateCustomer, updateEmployee, updateTransaction } from 'src/redux/action/modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { BACKEND_URL } from 'src/Constant';
+import { addEmployees, addCustomers, addTransactions } from 'src/redux/action/information';
 
 const Page = () => {
+  const dispatch = useDispatch();
   const {users} = useSelector(state=>state.users)
   const router = useRouter();
   const auth = useAuth();
@@ -65,29 +67,38 @@ const Page = () => {
     }
   });
 
-  const handleLogin=()=>{
-    let err = false;
-    users.map((user,index)=>{
-      if(user.email == formData.email && user.password == formData.password){
-        localStorage.setItem('user', JSON.stringify(user));
-        window.sessionStorage.setItem('authenticated', 'true');
-        router.push('/');
-        err = true;
-      }
-    });
-
-    if(!err) setError(true);
-
-    // axios.post(`${process.env.SERVER_URL}/api/users/login`, formData)
-    //   .then((res) => {
-    //     dispatch(updateEmployee(res.data.employees));
-    //     dispatch(updateCustomer(res.data.customers));
-    //     dispatch(updateTransaction(res.data.transactions));
-    //     localStorage.setItem('user', JSON.stringify(res.data.myInfor));
+  const handleLogin=async()=>{
+    // let err = false;
+    // users.map((user,index)=>{
+    //   if(user.email == formData.email && user.password == formData.password){
+    //     localStorage.setItem('user', JSON.stringify(user));
     //     window.sessionStorage.setItem('authenticated', 'true');
-    //   }).catch((err) => {
-      
-    //   });
+    //     router.push('/');
+    //     err = true;
+    //   }
+    // });
+
+
+    try {
+        const res = await axios.post(`${BACKEND_URL}/api/users/login`, formData);
+        
+        const {employees, customers, transactions} = res.data;
+        console.log(employees)
+        dispatch(addEmployees(employees));
+        console.log("employee")
+
+        dispatch(addCustomers(customers));
+        console.log("employee")
+
+        dispatch(addTransactions(transactions));
+
+        localStorage.setItem('user', JSON.stringify(res.data.myInfor));
+        window.sessionStorage.setItem('authenticated', 'true');
+        router.push('/')
+      }
+    catch(err) {
+        if(!err) setError(true);
+      };
   }
 
   const handleChange = (e) => setData({

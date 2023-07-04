@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -13,6 +13,9 @@ import { TransactionsTable } from 'src/sections/transaction/transactions';
 import { TransactionsSearch } from 'src/sections/transaction/transactions-search';
 import { updateTransaction } from 'src/redux/action/modal';
 import TransactionModal from 'src/modal/transactionModal';
+import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
+import { addTransactions } from 'src/redux/action/information';
 
 const now = new Date();
 
@@ -59,7 +62,7 @@ const Page = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
+  let customers = useCustomers( page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
@@ -82,6 +85,21 @@ const Page = () => {
 
   const {transaction} = useSelector(state=>state.modal);
 const dispatch = useDispatch();
+
+useEffect(()=>{
+  async function fetchData(){try {
+    const res = await axios.get(`${BACKEND_URL}/api/transactions`);
+    
+    const employees = res.data;
+    dispatch(addTransactions(employees))
+    // setData(employees);
+    //setCustomers(useCustomers(page, rowsPerPage));
+  }
+  catch(err) {
+    if(!err) console.log(err);
+  };}
+  fetchData();
+}, [])
 
 const handleAdd=()=>{
   let cus = {

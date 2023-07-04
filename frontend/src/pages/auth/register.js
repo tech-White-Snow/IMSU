@@ -3,50 +3,20 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, InputLabel, Link, Stack, TextField, Typography,FormControl,  Select,  MenuItem } from '@mui/material';
+import { Box, Button, InputLabel, Link, Stack, TextField, Typography,FormControl,  Select,  MenuItem, Alert } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import { updateAlert } from 'src/redux/action/alert';
+import { useDispatch, useSelector } from 'react-redux';
+import {BACKEND_URL} from '../../Constant';
 
 const Page = () => {
+  const dispatch = useDispatch();
+  const {Alerts} = useSelector(state=>state);
   const router = useRouter();
   const auth = useAuth();
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      name: '',
-      password: '',
-      submit: null
-    },
-    validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      name: Yup
-        .string()
-        .max(255)
-        .required('Name is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required')
-    }),
-    onSubmit: async (values, helpers) => {
-      try {
-        await auth.signUp(values.email, values.name, values.password);
-        router.push('/');
-      } catch (err) {
-        helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
-        helpers.setSubmitting(false);
-      }
-    }
-  });
-
   const [formData, setData] = useState({
     name: '',
     email: '',
@@ -57,18 +27,81 @@ const Page = () => {
     confirm_password: '',
   });
 
+  useEffect(()=>{
+  }, [Alerts])
+  // const formik = useFormik({
+  //   initialValues: {
+  //     email: '',
+  //     name: '',
+  //     password: '',
+  //     submit: null
+  //   },
+  //   validationSchema: Yup.object({
+  //     email: Yup
+  //       .string()
+  //       .email('Must be a valid email')
+  //       .max(255)
+  //       .required('Email is required'),
+  //     name: Yup
+  //       .string()
+  //       .max(255)
+  //       .required('Name is required'),
+  //     password: Yup
+  //       .string()
+  //       .max(255)
+  //       .required('Password is required')
+  //   }),
+  //   onSubmit: async (values, helpers) => {
+  //     try {
+  //       await auth.signUp(values.email, values.name, values.password);
+  //       router.push('/');
+  //     } catch (err) {
+  //       helpers.setStatus({ success: false });
+  //       helpers.setErrors({ submit: err.message });
+  //       helpers.setSubmitting(false);
+  //     }
+  //   }
+  // });
+
+  
+
   const handleChange = (e) => setData({
     ...formData,
     [e.target.name]: e.target.value
   });
+  const validateData=()=>{
+    if(!formData.name.length) {        
+      dispatch(updateAlert('Name is required.'));
+      return true;
+    }
+    if(formData.password!=formData.confirm_password) {        
+      dispatch(updateAlert('Password not matched.'));
+      return true;
+    }
+    return false;
+  }
+   
+  const handleRegister = async () => { 
+    if(validateData()) return;
+
+      const body = JSON.stringify(formData);
+    
+      try {
   
-  const handleRegister = () =>{
-      // axios.post(`${process.env.SERVER_URL}/api/users/`, formData)
-      // .then((res) => {
-      //   router.push('./api/login');
-      // }).catch((err) => {
+        const res = await axios.post(`${BACKEND_URL}/api/users/`, formData);
+        
       
-      // });
+        router.push('/auth/login');
+      } catch (err) {
+ 
+        // console.log(err)
+        // const {errors} = err.response.data;
+        
+        if (err) {
+          dispatch(updateAlert(err.toString()));
+        }
+      }
+
   }
 
   return (
@@ -118,28 +151,29 @@ const Page = () => {
                 </Link>
               </Typography>
             </Stack>
-            <form
-              noValidate
-              onSubmit={formik.handleSubmit}
+            <div
+              
+              //onSubmit={formik.handleSubmit}
             >
+              {(Alerts.error!='') ?<Alert severity="error"> {Alerts.error}</Alert>:''}
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                //  error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
+                //  helperText={formik.touched.name && formik.errors.name}
                   label="Name"
                   name="name"
-                  onBlur={formik.handleBlur}
+                //  onBlur={formik.handleBlur}
                   onChange={handleChange}
                   value={formData.name}
                 />
                 <TextField
-                  error={!!(formik.touched.email && formik.errors.email)}
+                //  error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
+                 // helperText={formik.touched.email && formik.errors.email}
                   label="Email Address"
                   name="email"
-                  onBlur={formik.handleBlur}
+                //  onBlur={formik.handleBlur}
                   onChange={handleChange}
                   type="email"
                   value={formData.email}
@@ -147,7 +181,7 @@ const Page = () => {
                 <TextField
                   label="Gender"
                   name="gender"
-                  onBlur={formik.handleBlur}
+                 // onBlur={formik.handleBlur}
                   onChange={handleChange}
                   type="gender"
                   value={formData.gender}
@@ -165,29 +199,29 @@ const Page = () => {
                   </Select>
                 </FormControl>
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
+                //  error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
+                //  helperText={formik.touched.password && formik.errors.password}
                   label="Password"
                   name="password"
-                  onBlur={formik.handleBlur}
+                //  onBlur={formik.handleBlur}
                   onChange={handleChange}
                   type="password"
                   value={formData.password}
                 />
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
+                //  error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
+                //  helperText={formik.touched.password && formik.errors.password}
                   label="Confirm Password"
                   name="confirm_password"
-                  onBlur={formik.handleBlur}
+                 // onBlur={formik.handleBlur}
                   onChange={handleChange}
                   type="password"
                   value={formData.password_confirm}
                 />
               </Stack>
-              {formik.errors.submit && (
+              {/* {formik.errors.submit && (
                 <Typography
                   color="error"
                   sx={{ mt: 3 }}
@@ -195,7 +229,7 @@ const Page = () => {
                 >
                   {formik.errors.submit}
                 </Typography>
-              )}
+              )} */}
               <Button
                 fullWidth
                 size="large"
@@ -206,7 +240,7 @@ const Page = () => {
               >
                 Register
               </Button>
-            </form>
+            </div>
           </div>
         </Box>
       </Box>

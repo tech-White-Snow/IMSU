@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal, Box, TextField, FormControl, InputLabel, Select, MenuItem,Typography } from '@mui/material';
+import { Button, Modal, Box, TextField, FormControl, InputLabel, Select, MenuItem,Typography, Alert } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeCustomer } from 'src/redux/action/modal';
 import { addCustomers } from 'src/redux/action/information';
 import axios from 'axios';
+import { BACKEND_URL } from 'src/Constant';
+import { useRouter } from 'next/router';
 
 const CustomerModal = () =>{
   const dispatch = useDispatch();
+  const [alert, setAlert] = useState("");
   const {customer} = useSelector(state=>state.modal);
   const [formValues, setFormValues] = useState({customer
   });
@@ -21,27 +24,37 @@ const CustomerModal = () =>{
     setFormValues(customer);
   }, [customer])
 
+  const router = useRouter();
   const handleUpdate=(e)=>{
-    console(e);
-   // if(!e){
-    // axios.put(`${process.env.SERVER_URL}/api/customers/${formValues.id}`)
-//   .then((res) => {
-//     dispatch(addCustomers(res.data));
-//   })
-//   .catch((err) => {
-//     // Handle any errors that occur during the request
-//     console.error(err);
-//   });
-    // }else{
-          // axios.post(`${process.env.SERVER_URL}/api/customers/`, formValues)
-          //   .then((res) => {
-          //     dispatch(addCustomers(res.data));
-          //   })
-          //   .catch((err) => {
-          //     // Handle any errors that occur during the request
-          //     console.error(err);
-          //   });
-   // }
+    
+   if(!e){
+    axios.put(`${BACKEND_URL}/api/customers/${formValues._id}`, formValues)
+            .then((res) => {
+              dispatch(addCustomers(res.data));
+              handleClose();
+              router.push('/customers');
+              setAlert("");
+            })
+            .catch((err) => {
+              // Handle any errors that occur during the request
+              console.error(err);
+              setAlert(err.data.errors);
+            });
+    }else{
+     
+          axios.post(`${BACKEND_URL}/api/customers/`, formValues)
+            .then((res) => {
+              dispatch(addCustomers(res.data));
+              handleClose();
+              router.push('/customers');
+              setAlert("");
+            })
+            .catch((err) => {
+              // Handle any errors that occur during the request
+              console.error(err.data.errors);
+              setAlert(err.data.errors);
+            });
+   }
   }
 
   const handleChange = (event) => {
@@ -66,6 +79,7 @@ const CustomerModal = () =>{
           bgcolor: 'background.paper',
           p: 2}}
         >
+          {alert.length ? <Alert>{alert}</Alert>:''}
           <Typography 
             variant="h4"
             sx={{

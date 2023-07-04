@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
-import { Box, Container, Unstable_Grid2 as Grid, Typography } from '@mui/material';
+import { Box, Container, Unstable_Grid2 as Grid, Typography, Alert } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OverviewBudget } from 'src/sections/overview/overview-budget';
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
@@ -19,6 +19,7 @@ const now = new Date();
 const Page = () => {
   const router = useRouter();
   let MyInfor = JSON.parse(localStorage.getItem("user"));
+  const {Alerts} = useSelector(state=>state);
   useEffect(()=>{
     let user = localStorage.getItem('user');
      if(user=="null"||!user) {
@@ -32,6 +33,8 @@ const Page = () => {
         Overview | IM Serve
       </title>
     </Head>
+    {console.log(Alerts)}
+    <Alert severity="error">{Alerts.error}</Alert>
     <Box
       component="main"
       sx={{
@@ -89,7 +92,7 @@ const Page = () => {
               value={75.5}
             />
           </Grid>
-          <Grid
+          {MyInfor!=null ? MyInfor.role=='Admin'?<Grid
             xs={12}
             sm={6}
             lg={3}
@@ -98,7 +101,8 @@ const Page = () => {
               sx={{ height: '100%' }}
               value="$15k"
             />
-          </Grid>
+          </Grid>:'':''}
+          
           <Grid
             xs={12}
             lg={8}
@@ -117,7 +121,7 @@ const Page = () => {
               sx={{ height: '100%' }}
             />
           </Grid>
-          <Grid
+          {MyInfor!=null ? MyInfor.role=='Admin'?<Grid
             xs={12}
             md={6}
             lg={4}
@@ -127,8 +131,8 @@ const Page = () => {
               labels={['Desktop', 'Tablet', 'Phone']}
               sx={{ height: '100%' }}
             />
-          </Grid>
-          <Grid
+          </Grid>:'':''}
+          {/* <Grid
             xs={12}
             md={6}
             lg={4}
@@ -168,7 +172,7 @@ const Page = () => {
               ]}
               sx={{ height: '100%' }}
             />
-          </Grid>
+          </Grid> */}
           <Grid
             xs={12}
             md={12}

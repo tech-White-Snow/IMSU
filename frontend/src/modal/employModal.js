@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal, Box, TextField, FormControl, InputLabel, Select, MenuItem,Typography } from '@mui/material';
+import { Button, Modal, Box, TextField, FormControl, InputLabel, Select, MenuItem,Typography, Alert } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeEmployee } from 'src/redux/action/modal';
 import { addEmployees } from 'src/redux/action/information';
+import { BACKEND_URL } from 'src/Constant';
+import axios from 'axios';
 
 const EmployeeModal = () =>{
   const dispatch = useDispatch();
+  const [alert, setAlert] = useState("");
   const {employee} = useSelector(state=>state.modal);
   const [formValues, setFormValues] = useState({employee
   });
@@ -21,7 +24,7 @@ const EmployeeModal = () =>{
     setFormValues(employee);
   }, [employee])
 
-  const handleUpdate=()=>{
+  const handleUpdate=async()=>{
         // axios.put(`${process.env.SERVER_URL}/api/users/${formValues.id}`)
     //   .then((res) => {
     //     dispatch(addEmployees(res.data));
@@ -30,6 +33,21 @@ const EmployeeModal = () =>{
     //     // Handle any errors that occur during the request
     //     console.error(err);
     //   });
+    
+    try {
+   
+      const res = await axios.put(`${BACKEND_URL}/api/users/${formValues._id}`, formValues);
+    
+      const employees = res.data;
+      dispatch(addEmployees(employees));
+    
+      handleClose();
+      setAlert("");
+    }
+  catch(err) {
+      if(!err) console.log(err);
+      setAlert(err.data.errors);
+    };
   }
 
   const handleChange = (event) => {
@@ -54,6 +72,7 @@ const EmployeeModal = () =>{
           bgcolor: 'background.paper',
           p: 2}}
         >
+          {alert.length?<Alert>{alert}</Alert>:''}
           <Typography 
             variant="h4"
             sx={{

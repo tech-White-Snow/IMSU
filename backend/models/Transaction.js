@@ -7,8 +7,8 @@ const TransactionSchema = new Schema({
     required: true
   },
   date: {
-    type: Date,
-    required: Date.now,
+    type: String,
+    
   },
   company_Id: {
     type: mongoose.Schema.Types.ObjectId,

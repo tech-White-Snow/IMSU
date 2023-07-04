@@ -11,13 +11,13 @@ const CustomerSchema = new mongoose.Schema({
     unique: true
   },
   gender: {
-    type: String,
-    required: true
+    type: String
   },
   address: {
     type: String,
     required: true
   },
+  avatar:{type:String},
   company: {
     type: String,
     required: true
