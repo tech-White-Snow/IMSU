@@ -70,7 +70,7 @@ export const AvatarDropzone = () => {
         className="w-11/12 rounded-md bg-white mt-2 self-center opacity-1"
       >
         <input className="input-zone" {...getInputProps()} />
-       {console.log(MyInfor.avatar)}
+     
         {!isDragActive &&
           <div className="text-center">
             {selectedFile ? 
@@ -81,13 +81,14 @@ export const AvatarDropzone = () => {
                 height={"80px"}
                 alt="Uploaded Image" 
               /> :
+              MyInfor!=null?
               <img
                 src={MyInfor.avatar}
                 width={"80px"}
                 height={"80px"}
                 alt="Upload your avatar file"
                 className="mx-auto"
-              />
+              />:''
             }
           </div>
         }
