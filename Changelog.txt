@@ -1,9 +1,0 @@
-10:40 PM, 30 June 2023
--frontend
-    	inserted search form to dashboard page
-	updated hearder link
-	styled pages
--backend
-	initial setting....
-		created database model, server
-		created api module

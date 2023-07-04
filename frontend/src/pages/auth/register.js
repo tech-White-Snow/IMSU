@@ -15,6 +15,7 @@ import {BACKEND_URL} from '../../Constant';
 const Page = () => {
   const dispatch = useDispatch();
   const {Alerts} = useSelector(state=>state);
+  const [alert1, setAlert] = useState(""); 
   const router = useRouter();
   const auth = useAuth();
   const [formData, setData] = useState({
@@ -71,11 +72,28 @@ const Page = () => {
   });
   const validateData=()=>{
     if(!formData.name.length) {        
-      dispatch(updateAlert('Name is required.'));
+     // dispatch(updateAlert('Name is required.'));
+      setAlert("Name is required");
       return true;
     }
+    if(!formData.gender.length) {        
+      //dispatch(updateAlert('Name is required.'));
+      setAlert("Gender is required");
+      return true;
+    }
+    if(!formData.email.length) {        
+      //dispatch(updateAlert('Name is required.'));
+      setAlert("Email is required");
+      return true;
+    }
+    if(!formData.role.length) {        
+      //dispatch(updateAlert('Name is required.'));
+      setAlert("Role is required");
+      return true;
+    }
+    
     if(formData.password!=formData.confirm_password) {        
-      dispatch(updateAlert('Password not matched.'));
+      setAlert("Passwords is not matched.")
       return true;
     }
     return false;
@@ -98,7 +116,14 @@ const Page = () => {
         // const {errors} = err.response.data;
         
         if (err) {
-          dispatch(updateAlert(err.toString()));
+          // dispatch(updateAlert(err.toString()));
+          console.log(err.data);
+          let dd='';
+          if(err.data.errors.errors!=null&&err.data.errors.errors!='')
+           {dd = err.data.errors.errors[0].msg.toString(); console.log(dd)}
+           else dd=err.data.errors.toString();
+           console.log(dd)
+          setAlert(dd);
         }
       }
 
@@ -155,7 +180,7 @@ const Page = () => {
               
               //onSubmit={formik.handleSubmit}
             >
-              {(Alerts.error!='') ?<Alert severity="error"> {Alerts.error}</Alert>:''}
+              {(alert1!='') ?<Alert severity="error"> {alert1}</Alert>:''}
               <Stack spacing={3}>
                 <TextField
                 //  error={!!(formik.touched.name && formik.errors.name)}
@@ -164,6 +189,7 @@ const Page = () => {
                   label="Name"
                   name="name"
                 //  onBlur={formik.handleBlur}
+                  type="text"
                   onChange={handleChange}
                   value={formData.name}
                 />
