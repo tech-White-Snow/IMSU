@@ -152,7 +152,7 @@ const Page = () => {
                 </Button> : "" :''}
               </div>
             </Stack>
-            <CustomersSearch />
+            {/* <CustomersSearch /> */}
             <CustomersTable
               count={data.length}
               items={customers}

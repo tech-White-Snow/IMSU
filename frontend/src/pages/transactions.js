@@ -157,7 +157,7 @@ const handleAdd=()=>{
                 </Button> : "":''}
               </div>
             </Stack>
-            <TransactionsSearch />
+            {/* <TransactionsSearch /> */}
             <TransactionsTable
               count={data.length}
               items={customers}

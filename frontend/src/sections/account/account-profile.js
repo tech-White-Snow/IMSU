@@ -67,8 +67,9 @@ export const AccountProfile= () => {
         <Button
           fullWidth
           variant="text"
+          disabled="true"
         >
-          Upload picture
+          Upload avatar by clicking image section
         </Button>
       </CardActions>
     </Card>

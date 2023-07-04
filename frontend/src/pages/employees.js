@@ -189,7 +189,7 @@ const Page = () => {
                 </Button> : ""} */}
               </div>
             </Stack>
-            <EmployeesSearch />
+            {/* <EmployeesSearch /> */}
             <EmployeesTable
               count={data.length}
               items={customers}
