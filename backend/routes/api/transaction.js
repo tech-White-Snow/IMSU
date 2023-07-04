@@ -11,6 +11,66 @@ const User    = require('../../models/User');
 const Customer    = require('../../models/Customer');
 const Transaction = require('../../models/Transaction');
 
+//define swagger 's transaction schema
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transaction:
+ *       type: object
+ *       required:
+ *         - amount
+ *         - type
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the article
+ *         amount:
+ *           type: string
+ *           description: amount of transaction
+ *         type:
+ *           type: string
+ *           description: type of transaction
+ *         date:
+ *           type: string
+ *           description: date of transaction
+ *         company:
+ *           type: string
+ *           description: company       
+ *       example:
+ *         id: d5fE_asz
+ *         amount: $10000
+ *         description: transaction
+ *         date: 23 July 2023
+ */
+
+/**
+ * @swagger
+ * /api/transactions:
+ *   get:
+ *     summary: Retrieve a list of Transactions
+ *     tags: [Transactions]
+ *     responses:
+ *       200:
+ *         description: A list of Transactions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
 
 //* method    GET
 //* route     api/transactions
@@ -38,6 +98,40 @@ router.get('/',
     res.status(500).send('Server Error')
   }
 })
+
+
+/**
+ * @swagger
+ * /api/transactions:
+ *   post:
+ *     summary: register new transaction
+ *     tags: [Transactions]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Transaction'
+ *     responses:
+ *       200:
+ *         description: updated transaction list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
 
 //* method    POST
 //* route     api/transactions
@@ -82,8 +176,41 @@ router.post('/',
   }
 })
 
+/**
+ * @swagger
+ * /api/transactions/{id}:
+ *  put:
+ *    summary: Update the transaction by the id
+ *    tags: [Transactions]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The transaction id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Transaction'
+ *    responses:
+ *      200:
+ *        description: Updated transaction list
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Transaction'
+ *      404:
+ *        description: The transaction was not found
+ *      500:
+ *        description: Some error happened
+ */
+
+
 //* method    PUT
-//* route     api/transactionss/:id
+//* route     api/transactions/:id
 //* desc      Update transactions
 //* access    Private
 
@@ -117,6 +244,34 @@ router.put('/:id', async (req, res) => {
     return res.status(500).json({ error: 'Server error' });
   }
 });
+
+/**
+ * @swagger
+ * /api/transactions/{id}:
+ *   delete:
+ *     summary: Remove the transaction by id
+ *     tags: [Transactions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The transaction id
+ * 
+ *     responses:
+ *       200:
+ *         description: updated transaction list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transaction'
+ *       404:
+ *         description: The article was not found
+ */
+
 
 //* method    DELETE
 //* route     api/transactions/:id

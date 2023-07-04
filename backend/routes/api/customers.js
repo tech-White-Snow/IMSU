@@ -15,6 +15,80 @@ const User    = require('../../models/User');
 const Customer    = require('../../models/Customer');
 const Transaction = require('../../models/Transaction');
 
+
+//define swagger 's Customer schema
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Customer:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the article
+ *         name:
+ *           type: string
+ *           description: name of customer
+ *         email:
+ *           type: string
+ *           description: email of customer
+ *         gender:
+ *           type: string
+ *           description: gender of customer
+ *         address:
+ *           type: string
+ *           description: address of customer
+ *         company:
+ *           type: string
+ *           description: company customer belonged to
+ *         company_id:
+ *           type: string
+ *           description: company 's id
+ *         avatar:
+ *           type: string
+ *           description: company 's id
+ *         
+ *       example:
+ *         id: d5fE_asz
+ *         name: Hans Flutter
+ *         email: admin1@example.com
+ *         gender: Femail
+ *         
+ */
+
+
+/**
+ * @swagger
+ * /api/customers:
+ *   get:
+ *     summary: Retrieve a list of customer
+ *     tags: [Customers]
+ *     responses:
+ *       200:
+ *         description: A list of customer
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Customer'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
+
 //* method    GET
 //* route     api/customers
 //* desc      get all customer
@@ -42,9 +116,43 @@ router.get('/',
   }
 })
 
+
+/**
+ * @swagger
+ * /api/customers:
+ *   post:
+ *     summary: register new Customer
+ *     tags: [Customers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Customer'
+ *     responses:
+ *       200:
+ *         description: data of database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Customer'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
+
 //* method    POST
 //* route     api/customers
-//* desc      Register new user
+//* desc      Register new customer
 //* access    Public
 
 router.post('/', 
@@ -93,6 +201,41 @@ router.post('/',
   }
 })
 
+
+/**
+ * @swagger
+ * /api/customers/{id}:
+ *  put:
+ *    summary: Update the customer by the id
+ *    tags: [Customers]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The customer id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Customer'
+ *    responses:
+ *      200:
+ *        description: Updated customer list
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Customer'
+ *      404:
+ *        description: The customer was not found
+ *      500:
+ *        description: Some error happened
+ */
+
+
+
 //* method    PUT
 //* route     api/customers/:id
 //* desc      Update customer
@@ -128,6 +271,37 @@ router.put('/:id', async (req, res) => {
     return res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+/**
+ * @swagger
+ * /api/customers/{id}:
+ *   delete:
+ *     summary: Remove the customer by id
+ *     tags: [Customers]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The customer id
+ * 
+ *     responses:
+ *       200:
+ *         description: updated customer list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Customer'
+ *       404:
+ *         description: The article was not found
+ */
+
+
+
 
 //* method    DELETE
 //* route     api/customers/:id

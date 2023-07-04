@@ -12,12 +12,17 @@ const swaggerOptions = {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'Your API Documentation',
+        title: 'IM Service API Documentation',
         version: '1.0.0',
-        description: 'API documentation for your MERN stack application',
+        description: 'API documentation for IM Service MERN stack application',
       },
+      servers:[
+        {
+          url:"http://95.217.55.215:5000"
+        },
+      ],
     },
-    apis: ['./path/to/your/annotated/api/files/*.js'],
+    apis: ['./server.js','./routes/api/users.js','./routes/api/customers.js','./routes/api/transaction.js'],
   };
   
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -36,6 +41,10 @@ app.use(express.json({ extended: false }));
 
 //swaggerUI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+// // Init swagger
+// require("./config/swagger").swagger_init(app, express);
 
 //* Define routes
 

@@ -1,0 +1,58 @@
+swagger: "2.0"
+info:
+  description: "REST API with Swagger doc"
+  version: "1.0.0"
+  title: "REST - Swagger Babelomics"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "babelomics@babelomics.es"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+basePath: "/api"
+tags:
+- name: "auth"
+  description: "Auth endpoints"
+schemes:
+- "http"
+paths:
+  /auth/login:
+    post:
+      description: "Lofgin to the application"
+      tags:
+      - "auth"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        description: "Email to use for login."
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "password"
+        description: "User's password."
+        in: "formData"
+        required: true
+        type: "string"
+        format: "password"
+      responses:
+         200:
+           description: "login"
+  /files/list:
+    get:
+      description: "List files"
+      tags:
+      - "files"
+      produces:
+      - "application/json"
+      responses:
+         200:
+           description: "List files"
+  /ping:
+    get:
+      description: "Ping Api Rest"
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: Ping response

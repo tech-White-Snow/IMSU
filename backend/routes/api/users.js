@@ -26,12 +26,167 @@ const User = require('../../models/User')
 const Transaction = require('../../models/Transaction')
 const Customer = require('../../models/Customer')
 
+const schema = require('../../swagger/schema');
 
+//define swagger 's user schema
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *         - role
+ *       properties:
+ *         id:
+ *           type: objecid
+ *           description: The auto-generated id of the article
+ *         name:
+ *           type: string
+ *           description: name of user
+ *         email:
+ *           type: string
+ *           description: email of user
+ *         gender:
+ *           type: string
+ *           description: gender of user
+ *         address:
+ *           type: string
+ *           description: address of user
+ *         company:
+ *           type: string
+ *           description: company user belonged to
+ *         company_id:
+ *           type: string
+ *           description: company 's id
+ *         password:
+ *           type: string
+ *           description: password of user
+ *         role:
+ *           type: string
+ *           description: role of user
+ *       example:
+ *         id: d5fE_asz
+ *         name: Hans Flutter
+ *         email: Admin@example.com
+ *         gender: Femail
+ *         role: Admin
+ *         password: 123456
+ */
+
+//define swagger 's Customer schema
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Customer:
+ *       type: object
+ *       required:
+ *         - name
+ *         - email
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the article
+ *         name:
+ *           type: string
+ *           description: name of customer
+ *         email:
+ *           type: string
+ *           description: email of customer
+ *         gender:
+ *           type: string
+ *           description: gender of customer
+ *         address:
+ *           type: string
+ *           description: address of customer
+ *         company:
+ *           type: string
+ *           description: company customer belonged to
+ *         company_id:
+ *           type: string
+ *           description: company 's id
+ *         avatar:
+ *           type: string
+ *           description: company 's id
+ *         
+ *       example:
+ *         id: d5fE_asz
+ *         name: Hans Flutter
+ *         email: admin1@example.com
+ *         gender: Femail
+ *         
+ */
+
+
+//define swagger 's transaction schema
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transaction:
+ *       type: object
+ *       required:
+ *         - amount
+ *         - type
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the article
+ *         amount:
+ *           type: string
+ *           description: amount of transaction
+ *         type:
+ *           type: string
+ *           description: type of transaction
+ *         date:
+ *           type: string
+ *           description: date of transaction
+ *         company:
+ *           type: string
+ *           description: company       
+ *       example:
+ *         id: d5fE_asz
+ *         amount: $10000
+ *         description: transaction
+ *         date: 23 July 2023
+ */
+
+
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Retrieve a list of employees
+ *     tags: [Employees]
+ *     responses:
+ *       200:
+ *         description: A list of employees
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
 //* method    GET
 //* route     api/users
 //* desc      get all user
 //* access    Public
-
 router.get('/',
   [],
   async (req, res) => {
@@ -53,6 +208,122 @@ router.get('/',
       res.status(500).send('Server Error')
     }
   })
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Login:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: email
+ *         password:
+ *           type: string
+ *           description: password
+ *       example:
+ *         email: admin@example.com
+ *         password: 123456
+ */
+
+
+
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Login and get database
+ *     tags: [Employees]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Login'
+ *     responses:
+ *       200:
+ *         description: data of database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Login:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           description: email
+ *         password:
+ *           type: string
+ *           description: password
+ *       example:
+ *         email: admin@example.com
+ *         password: 123456
+ */
+
+
+
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: register new user
+ *     tags: [Employees]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: data of database
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+
+//* method    POST
+//* route     api/users
+//* desc      Register new user
+//* access    Public
 
 //* method    POST
 //* route     api/users
@@ -172,6 +443,33 @@ router.post('/login',
     }
   })
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Remove the user by id
+ *     tags: [Employees]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ * 
+ *     responses:
+ *       200:
+ *         description: updated user list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       404:
+ *         description: The article was not found
+ */
+
 //* method    DELETE
 //* route     api/users/:id
 //* desc      Delete a user
@@ -195,6 +493,38 @@ router.delete('/:id', [],
 
     }
   })
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *  put:
+ *    summary: Update the user by the id
+ *    tags: [Employees]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The user id
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/User'
+ *    responses:
+ *      200:
+ *        description: Updated User list
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ *      404:
+ *        description: The user was not found
+ *      500:
+ *        description: Some error happened
+ */
 
 //* method    PUT
 //* route     api/users/:id
