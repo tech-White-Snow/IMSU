@@ -28,9 +28,12 @@ const CustomerModal = () =>{
   }, [customer])
 
   const router = useRouter();
+
+  //update or add customer : normal user cannot
   const handleUpdate=(e)=>{
     
    if(!e){
+    //update customer: admin and manager can do
     axios.put(`${BACKEND_URL}/api/customers/${formValues._id}`, formValues)
             .then((res) => {
               dispatch(addCustomers(res.data));
@@ -44,7 +47,8 @@ const CustomerModal = () =>{
               setAlert(err.data.errors);
             });
     }else{
-     
+
+         //add customer: admin only can do
           axios.post(`${BACKEND_URL}/api/customers/`, formValues)
             .then((res) => {
               dispatch(addCustomers(res.data));
@@ -60,6 +64,7 @@ const CustomerModal = () =>{
    }
   }
 
+  //change input value
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({

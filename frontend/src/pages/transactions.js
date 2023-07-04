@@ -38,9 +38,11 @@ const now = new Date();
 // ];
 
 
-
+//transaction component
 const Page = () => {
   const data = useSelector(state=>state.transactions.transactions);
+
+  //get logined user information 
   let MyInfor = JSON.parse(localStorage.getItem("user"));
   const useCustomers = (page, rowsPerPage) => {
     return useMemo(
@@ -86,6 +88,7 @@ const Page = () => {
   const {transaction} = useSelector(state=>state.modal);
 const dispatch = useDispatch();
 
+//get transaction data
 useEffect(()=>{
   async function fetchData(){try {
     const res = await axios.get(`${BACKEND_URL}/api/transactions`);
@@ -101,6 +104,8 @@ useEffect(()=>{
   fetchData();
 }, [])
 
+
+//callback function of add button click : only admin can do...
 const handleAdd=()=>{
   let cus = {
     ...transaction,
@@ -179,6 +184,8 @@ const handleAdd=()=>{
   );
 };
 
+
+//get layout of page
 Page.getLayout = (page) => (
   <DashboardLayout>
     {page}

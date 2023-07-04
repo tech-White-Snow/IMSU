@@ -12,7 +12,7 @@ import { updateAlert } from 'src/redux/action/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {BACKEND_URL} from '../../Constant';
 
-//register companent
+//register component
 const Page = () => {
   const dispatch = useDispatch();
   const {Alerts} = useSelector(state=>state);
@@ -26,51 +26,20 @@ const Page = () => {
     address: '',
     role: '',
     password: '',
+    company: '',
     confirm_password: '',
   });
 
   useEffect(()=>{
   }, [Alerts])
-  // const formik = useFormik({
-  //   initialValues: {
-  //     email: '',
-  //     name: '',
-  //     password: '',
-  //     submit: null
-  //   },
-  //   validationSchema: Yup.object({
-  //     email: Yup
-  //       .string()
-  //       .email('Must be a valid email')
-  //       .max(255)
-  //       .required('Email is required'),
-  //     name: Yup
-  //       .string()
-  //       .max(255)
-  //       .required('Name is required'),
-  //     password: Yup
-  //       .string()
-  //       .max(255)
-  //       .required('Password is required')
-  //   }),
-  //   onSubmit: async (values, helpers) => {
-  //     try {
-  //       await auth.signUp(values.email, values.name, values.password);
-  //       router.push('/');
-  //     } catch (err) {
-  //       helpers.setStatus({ success: false });
-  //       helpers.setErrors({ submit: err.message });
-  //       helpers.setSubmitting(false);
-  //     }
-  //   }
-  // });
-
-  
-
+    
+  //change handle function calling if input value changed...
   const handleChange = (e) => setData({
     ...formData,
     [e.target.name]: e.target.value
   });
+
+  //validation of input value...
   const validateData=()=>{
     if(!formData.name.length) {        
      // dispatch(updateAlert('Name is required.'));
@@ -100,6 +69,7 @@ const Page = () => {
     return false;
   }
    
+  //register function calling clicked register button.
   const handleRegister = async () => { 
     if(validateData()) return;
 
@@ -216,6 +186,17 @@ const Page = () => {
                     <MenuItem value="Female">Female</MenuItem>
                   </Select>
                 </FormControl>
+                <TextField
+                //  error={!!(formik.touched.password && formik.errors.password)}
+                  fullWidth
+                //  helperText={formik.touched.password && formik.errors.password}
+                  label="Company"
+                  name="company"
+                //  onBlur={formik.handleBlur}
+                  onChange={handleChange}
+                  type="text"
+                  value={formData.company}
+                />
                 <InputLabel>Role</InputLabel> 
                 <FormControl fullWidth margin="small">
                   

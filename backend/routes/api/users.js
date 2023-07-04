@@ -345,7 +345,7 @@ router.post('/',
       return res.status(400).json({ errors, })
     }
 
-    const { name, email, gender, role, password } = req.body
+    const { name, email, gender, role, password, company } = req.body
 
     try {
 
@@ -368,7 +368,7 @@ router.post('/',
         gender,
         role,
         address: 'BB',
-        company: 0,
+        company,
         password
       })
 

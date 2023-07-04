@@ -27,16 +27,22 @@ const initialState = {
 //  transaction reducer
   const transactionReducer = (state = initialState, action) => {
     switch (action.type) {
+
+      //add transaction
       case 'ADD_TRANSACTION':
         return {
           ...state,
           transactions: [...state.transactions, action.payload],
         };
+
+      //add transactions
       case 'ADD_TRANSACTIONS':
         return {
           ...state,
           transactions: action.payload,
         };
+
+      //delete transaction
       case 'DELETE_Transaction':
         let trans = [];
         state.transactions.forEach((value, index) => {
@@ -49,6 +55,8 @@ const initialState = {
             ...state,
             transactions:[   ...trans],
         }
+
+      //update transaction
       case 'UPDATE_TRANSACTION':
           let trans1 = [];
           state.transactions.forEach((value, index) => {

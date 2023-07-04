@@ -26,9 +26,12 @@ const TransactionModal = () =>{
     setFormValues(transaction);
   }, [transaction])
 
+
+  //update or add transaction : normal user cannot do
   const handleUpdate=(e)=>{
     if(!e){
 
+      //update transaction : admin and manager can do
       axios.put(`${BACKEND_URL}/api/transactions/${formValues._id}`, formValues)
               .then((res) => {
                 dispatch(addTransactions(res.data));
@@ -41,6 +44,8 @@ const TransactionModal = () =>{
               });
       }else{
        console.log("object")
+
+       //add transaction : admin only can do
             axios.post(`${BACKEND_URL}/api/transactions/`, formValues)
               .then((res) => {
                 dispatch(addTransactions(res.data));

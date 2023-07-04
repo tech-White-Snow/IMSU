@@ -37,13 +37,18 @@ const now = new Date();
 //   },
 // ];
 
+
+
 //customer component
 
 const Page = () => {
   const dispatch = useDispatch();
   const data = useSelector(state=>state.customers.customers);
 
+  //get logined user's information
   let MyInfor = JSON.parse(localStorage.getItem("user"));
+  
+  //pagination setting
   const useCustomers = (page, rowsPerPage) => {
     return useMemo(
       () => {
@@ -52,6 +57,8 @@ const Page = () => {
       [page, rowsPerPage]
     );
   };
+
+
   const useCustomerIds = (customers) => {
     return useMemo(
       () => {
@@ -69,6 +76,7 @@ const Page = () => {
 
   const {customer} = useSelector(state=>state.modal);
 
+  //get customer's data every component called
   useEffect(()=>{
     async function fetchData(){try {
      
@@ -83,6 +91,7 @@ const Page = () => {
     fetchData();
   }, [])
 
+  //callback function called by click add function : only admin can do
   const handleAdd=()=>{
     let cus = {
       ...customer,
@@ -92,7 +101,7 @@ const Page = () => {
     dispatch(updateCustomer(cus));
   }
   
-
+  //pagination function
   const handlePageChange = useCallback(
     (event, value) => {
       setPage(value);
@@ -100,6 +109,7 @@ const Page = () => {
     []
   );
 
+  //pagination function
   const handleRowsPerPageChange = useCallback(
     (event) => {
       setRowsPerPage(event.target.value);
@@ -176,6 +186,7 @@ const Page = () => {
   );
 };
 
+//get layout of page
 Page.getLayout = (page) => (
   <DashboardLayout>
     {page}

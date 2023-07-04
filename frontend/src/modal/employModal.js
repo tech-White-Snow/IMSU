@@ -27,6 +27,7 @@ const EmployeeModal = () =>{
     setFormValues(employee);
   }, [employee])
 
+  //update employee 's data : admin and manager can do
   const handleUpdate=async()=>{
         // axios.put(`${process.env.SERVER_URL}/api/users/${formValues.id}`)
     //   .then((res) => {
@@ -53,6 +54,7 @@ const EmployeeModal = () =>{
     };
   }
 
+  //change input value
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues((prevValues) => ({

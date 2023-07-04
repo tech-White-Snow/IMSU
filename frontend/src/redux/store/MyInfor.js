@@ -11,6 +11,8 @@ const initialState = {
   
   const userReducer = (state = initialState, action) => {
     switch (action.type) {
+
+      //update myinfor reducer
       case 'UPDATE_MYINFOR':
         return action.payload;
       default:

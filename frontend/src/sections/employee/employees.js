@@ -26,6 +26,8 @@ import { BACKEND_URL } from 'src/Constant';
 import { useState } from 'react';
 import { applyPagination } from 'src/utils/apply-pagination';
 
+
+//employee table component
 export const EmployeesTable = (props) => {
   let {
     count = 0,
@@ -66,6 +68,8 @@ export const EmployeesTable = (props) => {
     dispatch(updateEmployee(modal));
   }
 
+
+  //delete employee : only admin
   const deleteHandle=async(index)=>{
     // axios.delete(`${process.env.SERVER_URL}/api/users/${index}`)
     //   .then((res) => {

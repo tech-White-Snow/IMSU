@@ -23,7 +23,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BACKEND_URL } from 'src/Constant';
 import { addEmployees, addCustomers, addTransactions } from 'src/redux/action/information';
 
-//Login companent
+//Login component
+
 const Page = () => {
   const dispatch = useDispatch();
   const {users} = useSelector(state=>state.users)
@@ -38,6 +39,7 @@ const Page = () => {
     password: ""
   })
 
+  //initial value and validation
   const formik = useFormik({
     initialValues: {
       email: 'demo@devias.io',
@@ -69,6 +71,7 @@ const Page = () => {
     }
   });
 
+  //login button 's callback function
   const handleLogin=async()=>{
     // let err = false;
     // users.map((user,index)=>{
@@ -108,6 +111,9 @@ const Page = () => {
           setAlert(dd);
       };
   }
+  
+
+  //function called if input value 'such as email and password' changed
 
   const handleChange = (e) => setData({
     ...formData,
@@ -258,6 +264,7 @@ const Page = () => {
   );
 };
 
+//get layout of page
 Page.getLayout = (page) => (
   <AuthLayout>
     {page}

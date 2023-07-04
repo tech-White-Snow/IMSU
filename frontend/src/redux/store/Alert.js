@@ -7,6 +7,7 @@ const initialState = {
   
   const Alerts = (state = initialState, action) => {
     switch (action.type) {
+      //update alert infor
       case 'ALERT':
         return {
             ...state,

@@ -1,3 +1,5 @@
+
+//init customers
 const initialState = {
     customers: [ 
       {
@@ -75,16 +77,21 @@ const initialState = {
   //customer reducer
   const customerReducer = (state = initialState, action) => {
     switch (action.type) {
+      //add customer to customers reducer
       case 'ADD_CUSTOMER':
         return {
           ...state,
           customers: [...state.customers, action.payload],
         };
+      
+      //update all customers
       case 'ADD_CUSTOMERS':
         return {
           ...state,
           customers: action.payload,
         };
+
+      //delete customer
       case 'DELETE_CUSTOMER':
         let trans = [];
         state.customers.forEach((value, index) => {
@@ -98,6 +105,8 @@ const initialState = {
             ...state,
             customers:[   ...trans],
         }
+
+        //update customer
         case 'UPDATE_CUSTOMER':
             let trans1 = [];
             state.customers.forEach((value, index) => {

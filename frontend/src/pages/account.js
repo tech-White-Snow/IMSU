@@ -58,6 +58,8 @@ const Page = () => {
   )
 };
 
+
+// get layout of page
 Page.getLayout = (page) => (
   <DashboardLayout>
     {page}

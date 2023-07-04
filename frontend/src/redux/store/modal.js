@@ -1,3 +1,5 @@
+
+//init data
 const initialState = {
     employee: {   
         text:"",
@@ -34,51 +36,58 @@ const initialState = {
     //modal reducer
   const modalReducer = (state = initialState, action) => {
     switch (action.type) {
+        //update employee
       case 'UPDATE_MEMPLOYEE':
         return {
             ...state,
             employee: action.payload
         };
-    case 'CLOSE_MEMPLOYEE':
-        return {
-            ...state,
-            employee: {
-                ...state.employee,
-                open: false
-            }
-        };
-    case 'UPDATE_MTRANSACTION':
-        return {
-            ...state,
-            transaction: action.payload
-        };
-    case 'CLOSE_MTRANSACTION':
+
+            //modal's open to false
+        case 'CLOSE_MEMPLOYEE':
             return {
                 ...state,
-                transaction: {
-                    ...state.transaction,
+                employee: {
+                    ...state.employee,
                     open: false
                 }
             };
+            
+        //update tran
+        case 'UPDATE_MTRANSACTION':
+            return {
+                ...state,
+                transaction: action.payload
+            };
+                    
+        //modal's open to false
+        case 'CLOSE_MTRANSACTION':
+                return {
+                    ...state,
+                    transaction: {
+                        ...state.transaction,
+                        open: false
+                    }
+                };
 
-    case 'UPDATE_MCUSTOMER':
-        return {
-            ...state,
-            customer: action.payload
-        };
+        case 'UPDATE_MCUSTOMER':
+            return {
+                ...state,
+                customer: action.payload
+            };
 
-    case 'CLOSE_MCUSTOMER':
-        return {
-            ...state,
-            customer: {
-                ...state.customer,
-                open: false
-            }
-        };
-        
-      default:
-        return state;
-    }
+        case 'CLOSE_MCUSTOMER':
+            return {
+                ...state,
+                customer: {
+                    ...state.customer,
+                    open: false
+                }
+            };
+            
+        default:
+            return state;
+        }
   };
   
   export default modalReducer;

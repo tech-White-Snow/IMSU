@@ -16,6 +16,7 @@ import axios from 'axios';
 import { BACKEND_URL } from 'src/Constant';
 import { addEmployees } from 'src/redux/action/information';
 
+
 const now = new Date();
 
 
@@ -36,11 +37,15 @@ const now = new Date();
 //   },
 // ];
 
+
+
 //employee component
 
 const Page = () => {
   const dispatch = useDispatch();
   const data = useSelector(state=>state.users.users);
+
+  //init employee's data
   const [data1, setData] = useState([
     {
       id: 1,
@@ -66,7 +71,7 @@ const Page = () => {
   },
   ])
  
-  
+  //get logined user information
   let MyInfor = JSON.parse(localStorage.getItem("user"));
   const useCustomers = ( page, rowsPerPage) => {
     return useMemo(
@@ -80,6 +85,8 @@ const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [customers, setCustomers] = useState(useCustomers( page, rowsPerPage));
+  
+  //get employee's information
   useEffect(()=>{
     async function fetchData(){try {
       const res = await axios.get(`${BACKEND_URL}/api/users`);
@@ -97,6 +104,7 @@ const Page = () => {
   }, [])
 
 
+  //pagination's 
   const useCustomerIds = (customers) => {
     return useMemo(
       () => {
@@ -218,6 +226,7 @@ const Page = () => {
   );
 };
 
+// get layout of page
 Page.getLayout = (page) => (
   <DashboardLayout>
     {page}
