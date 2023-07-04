@@ -141,7 +141,7 @@ export const TransactionsTable = (props) => {
                       {Transaction.type}
                     </TableCell>
                     <TableCell>
-                      {Transaction.amount}
+                      {'$'+Transaction.amount}
                     </TableCell>
                     
                     <TableCell

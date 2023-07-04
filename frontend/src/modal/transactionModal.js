@@ -14,8 +14,7 @@ const TransactionModal = () =>{
   const dispatch = useDispatch();
   const router = useRouter();
   const {transaction} = useSelector(state=>state.modal);
-  const [formValues, setFormValues] = useState({transaction
-  });
+  const [formValues, setFormValues] = useState({transaction});
 
   // const [isOpen, setOpen] = useState(true);
  
@@ -58,6 +57,7 @@ const TransactionModal = () =>{
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+ 
     setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value
@@ -82,31 +82,39 @@ const TransactionModal = () =>{
             variant="h4"
             sx={{
               display: 'inline-flex',
-              marginLeft: `50px`,
+              marginLeft: `100px`,
+              marginBottom: `10px`,
             }}
           >
             {formValues.text == 'view'? "View" : formValues.text == 'add'? "Add" : 'Update'}          
           </Typography>
+          <InputLabel >Date</InputLabel> 
           <TextField
+            style={{marginTop: '0px'}}
             name="date"
-            label="Date"
+            type='date'
             value={formValues.date}
             onChange={handleChange}
             fullWidth
             margin="normal"
           />
-          <TextField
-            name="type"
-            label="Type"
-            value={formValues.type}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
+          <InputLabel>Type</InputLabel> 
+          <FormControl fullWidth margin="small">
+            <Select   
+              name="type"
+              value={formValues.type}
+              onChange={handleChange}
+            >
+              <MenuItem value="Withdrawal">Withdrawal</MenuItem>
+              <MenuItem value="Deposit">Deposit</MenuItem>
+              <MenuItem value="Transfer">Transfer</MenuItem>
+            </Select>
+          </FormControl>
        
           <TextField
             name="amount"
             label="Amount"
+            type='number'
             value={formValues.amount}
             onChange={handleChange}
             fullWidth
