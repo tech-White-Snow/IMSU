@@ -6,6 +6,8 @@ const multer = require("multer")
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
+
+//swagger options
 const swaggerOptions = {
     definition: {
       openapi: '3.0.0',
@@ -22,13 +24,17 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app = express();
 
+//mongodb connect
 connectDB();
+
+//cors middleware
 app.use(cors())
 
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('API Running'));
+//app.get('/', (req, res) => res.send('API Running'));
 
+//swaggerUI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //* Define routes

@@ -67,6 +67,9 @@ const companies = [
   }
 ];
 
+
+//account component
+
 const Page = () => (
   <>
     <Head>

@@ -36,6 +36,7 @@ const initialState = {
     ],
   };
   
+  //employee reducer
   const userReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'ADD_USER':

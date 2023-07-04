@@ -72,6 +72,7 @@ const initialState = {
     ],
   };
   
+  //customer reducer
   const customerReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'ADD_CUSTOMER':

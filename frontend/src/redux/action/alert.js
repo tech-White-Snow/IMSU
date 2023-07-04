@@ -1,3 +1,5 @@
+
+//update alert Infor
 export const updateAlert = (infor) => (dispatch) => {
     // ...
     dispatch({

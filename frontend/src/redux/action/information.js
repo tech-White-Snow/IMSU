@@ -1,3 +1,4 @@
+//add all customers
 export const addCustomers = (infor) => (dispatch) => {
     // ...
     dispatch({
@@ -5,6 +6,7 @@ export const addCustomers = (infor) => (dispatch) => {
         payload: infor
       });
   };
+  //delete customer
  export const deleteCustomer = (infor) => (dispatch) => {
     // ...
     dispatch({
@@ -12,6 +14,7 @@ export const addCustomers = (infor) => (dispatch) => {
         payload: infor
       });
   };
+    //delete transaction
   export const deleteTransactions = (infor) => (dispatch) => {
     // ...
     dispatch({
@@ -19,6 +22,7 @@ export const addCustomers = (infor) => (dispatch) => {
         payload: infor
       });
   };
+    //add transaction
   export const addTransactions = (infor) => (dispatch) => {
     // ...
     dispatch({
@@ -26,6 +30,7 @@ export const addCustomers = (infor) => (dispatch) => {
         payload: infor
       });
   };
+  //add employee 
   export const addEmployees = (infor) => (dispatch) => {
     // ...
     console.log("object")
@@ -35,6 +40,7 @@ export const addCustomers = (infor) => (dispatch) => {
       });
   };
 
+  //update user
   export const updateUsers = () => (dispatch) => {
     // ...
   

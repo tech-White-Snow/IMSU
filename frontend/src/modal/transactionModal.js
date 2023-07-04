@@ -7,6 +7,9 @@ import { BACKEND_URL } from 'src/Constant';
 import { addTransactions } from 'src/redux/action/information';
 import { useRouter } from 'next/router';
 
+
+//customer modal companent
+
 const TransactionModal = () =>{
   const dispatch = useDispatch();
   const router = useRouter();

@@ -1,3 +1,7 @@
+
+
+
+//update my information
 export const updateMyinfor = (infor) => (dispatch) => {
     // ...
     dispatch({

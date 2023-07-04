@@ -8,6 +8,7 @@ import customerReducer from './customerReducer';
 import modalReducer from './modal';
 import Alerts from './Alert';
 
+//combined reducer
 const rootReducer = combineReducers({
   users: userReducer,
   transactions: transactionReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
 });
 const composeEnhancers = typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+//store storing reducer
 const store = createStore(rootReducer,
   composeEnhancers(
     applyMiddleware(thunk)

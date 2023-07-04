@@ -7,6 +7,9 @@ import axios from 'axios';
 import { BACKEND_URL } from 'src/Constant';
 import { useRouter } from 'next/router';
 
+
+//customer modal companent
+
 const CustomerModal = () =>{
   const dispatch = useDispatch();
   const [alert, setAlert] = useState("");

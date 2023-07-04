@@ -24,6 +24,7 @@ const initialState = {
     ],
   };
   
+//  transaction reducer
   const transactionReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'ADD_TRANSACTION':

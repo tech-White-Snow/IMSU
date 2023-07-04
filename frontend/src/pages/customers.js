@@ -37,6 +37,8 @@ const now = new Date();
 //   },
 // ];
 
+//customer component
+
 const Page = () => {
   const dispatch = useDispatch();
   const data = useSelector(state=>state.customers.customers);

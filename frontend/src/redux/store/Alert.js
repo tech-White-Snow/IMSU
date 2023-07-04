@@ -2,6 +2,9 @@ const initialState = {
     error:''
   };
   
+
+  //Alerts reducer
+  
   const Alerts = (state = initialState, action) => {
     switch (action.type) {
       case 'ALERT':

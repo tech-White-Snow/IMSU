@@ -5,7 +5,7 @@ const db        = config.get('mongoURI')
 const connectDB = async () => {
 
   try {
-
+console.log(db)
     await mongoose.connect(db, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

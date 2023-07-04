@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BACKEND_URL } from 'src/Constant';
 import { addEmployees, addCustomers, addTransactions } from 'src/redux/action/information';
 
+//Login companent
 const Page = () => {
   const dispatch = useDispatch();
   const {users} = useSelector(state=>state.users)

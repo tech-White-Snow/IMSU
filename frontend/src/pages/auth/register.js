@@ -12,6 +12,7 @@ import { updateAlert } from 'src/redux/action/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {BACKEND_URL} from '../../Constant';
 
+//register companent
 const Page = () => {
   const dispatch = useDispatch();
   const {Alerts} = useSelector(state=>state);
@@ -204,17 +205,22 @@ const Page = () => {
                   type="email"
                   value={formData.email}
                 />
-                <TextField
-                  label="Gender"
-                  name="gender"
-                 // onBlur={formik.handleBlur}
-                  onChange={handleChange}
-                  type="gender"
-                  value={formData.gender}
-                />
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Role</InputLabel> 
+                <InputLabel>Gender</InputLabel> 
+                <FormControl fullWidth margin="small">
                   <Select   
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                  </Select>
+                </FormControl>
+                <InputLabel>Role</InputLabel> 
+                <FormControl fullWidth margin="small">
+                  
+                  <Select   
+
                     name="role"
                     value={formData.role}
                     onChange={handleChange}

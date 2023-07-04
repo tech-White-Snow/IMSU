@@ -31,7 +31,7 @@ const initialState = {
         description: ""
     },
 };
-  
+    //modal reducer
   const modalReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'UPDATE_MEMPLOYEE':
