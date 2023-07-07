@@ -122,6 +122,22 @@ const CustomerModal = () =>{
             fullWidth
             margin="normal"
           />
+          <TextField
+            name="company"
+            label="Company"
+            value={formValues.company}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            name="role"
+            label="Role"
+            value={formValues.role}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
           {formValues.text=='update' ? <Button variant="contained" color="primary" fullWidth onClick={()=>handleUpdate(0)}>
             Update
           </Button> : formValues.text=='add' ? <Button variant="contained" color="primary" fullWidth

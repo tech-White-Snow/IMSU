@@ -13,6 +13,14 @@ const CompanySchema = new Schema({
     type: String,
     required: true,
   },
+  //address of company
+  address:{
+    type: String
+  },
+  //customers of company
+  customer:{
+    type: String
+  }
 })
 
 module.exports = Company = mongoose.model('company', CompanySchema)

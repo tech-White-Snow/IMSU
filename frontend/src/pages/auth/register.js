@@ -30,8 +30,21 @@ const Page = () => {
     confirm_password: '',
   });
 
+  const [companies, setCompanies] = useState([]);
   useEffect(()=>{
-  }, [Alerts])
+    async function fetchData(){
+      try {
+     
+      const res = await axios.get(`${BACKEND_URL}/api/company`);
+
+      const companies1 = res.data;
+      setCompanies(companies1);
+    }
+    catch(err) {
+      if(!err) console.log(err);
+    };}
+    fetchData();
+  }, [])
     
   //change handle function calling if input value changed...
   const handleChange = (e) => setData({
@@ -48,6 +61,11 @@ const Page = () => {
     }
     if(!formData.gender.length) {        
       //dispatch(updateAlert('Name is required.'));
+      setAlert("Gender is required");
+      return true;
+    }
+    if(!formData.company.length) {        
+      //dispatch(updateAlert('Company is required. You can register company'));
       setAlert("Gender is required");
       return true;
     }
@@ -142,8 +160,18 @@ const Page = () => {
                   href="/auth/login"
                   underline="hover"
                   variant="subtitle2"
+                  margin='10px'
                 >
                   Log in
+                </Link>
+                <Link
+                  component={NextLink}
+                  href="/auth/company"
+                  underline="hover"
+                  variant="subtitle2"
+                  margin='10px'
+                >
+                  Register company
                 </Link>
               </Typography>
             </Stack>
@@ -186,17 +214,21 @@ const Page = () => {
                     <MenuItem value="Female">Female</MenuItem>
                   </Select>
                 </FormControl>
-                <TextField
-                //  error={!!(formik.touched.password && formik.errors.password)}
-                  fullWidth
-                //  helperText={formik.touched.password && formik.errors.password}
-                  label="Company"
-                  name="company"
-                //  onBlur={formik.handleBlur}
-                  onChange={handleChange}
-                  type="text"
-                  value={formData.company}
-                />
+                <InputLabel>Company</InputLabel> 
+                <FormControl fullWidth margin="small">
+                  <Select   
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                  >
+                    {companies.map((company, index)=>{
+                      return <MenuItem key={index} value={company.name}>{company.name}</MenuItem>
+                    })}
+                    {/* 
+                    <MenuItem value="Female">Female</MenuItem> */}
+                  </Select>
+                </FormControl>
+                
                 <InputLabel>Role</InputLabel> 
                 <FormControl fullWidth margin="small">
                   

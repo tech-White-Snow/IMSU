@@ -41,7 +41,7 @@ const EmployeeModal = () =>{
     try {
    
       const res = await axios.put(`${BACKEND_URL}/api/users/${formValues._id}`, formValues);
-    
+      
       const employees = res.data;
       dispatch(addEmployees(employees));
     

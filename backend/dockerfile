@@ -1,0 +1,20 @@
+# Base image
+FROM node:20
+
+# Set working directory
+WORKDIR /server
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy application files
+COPY . .
+
+# Expose port (change this to the port your Express app listens on)
+EXPOSE 5000
+
+# Start the server
+CMD [ "npm", "run", "server" ]
