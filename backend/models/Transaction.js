@@ -19,6 +19,10 @@ const TransactionSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companys'
   },
+  //company name
+  company: {
+    type: String,
+  },
   //type of transaction
   type: {
     type: String,

@@ -12,7 +12,7 @@ import { updateAlert } from 'src/redux/action/alert';
 import { useDispatch, useSelector } from 'react-redux';
 import {BACKEND_URL} from '../../Constant';
 
-//register component
+//register company
 const Page = () => {
   const dispatch = useDispatch();
   const {Alerts} = useSelector(state=>state);
@@ -21,29 +21,11 @@ const Page = () => {
   const auth = useAuth();
   const [formData, setData] = useState({
     name: '',
-    email: '',
-    gender: '',
     address: '',
-    role: '',
-    password: '',
-    company: '',
-    confirm_password: '',
   });
 
-  const [companies, setCompanies] = useState([]);
   useEffect(()=>{
-    async function fetchData(){
-      try {
-     
-      const res = await axios.get(`${BACKEND_URL}/api/company`);
-
-      const companies1 = res.data;
-      setCompanies(companies1);
-    }
-    catch(err) {
-      if(!err) console.log(err);
-    };}
-    fetchData();
+   
   }, [])
     
   //change handle function calling if input value changed...
@@ -59,31 +41,12 @@ const Page = () => {
       setAlert("Name is required");
       return true;
     }
-    if(!formData.gender.length) {        
+    if(!formData.address.length) {        
       //dispatch(updateAlert('Name is required.'));
-      setAlert("Gender is required");
+      setAlert("Address is required");
       return true;
     }
-    if(!formData.company.length) {        
-      //dispatch(updateAlert('Company is required. You can register company'));
-      setAlert("Gender is required");
-      return true;
-    }
-    if(!formData.email.length) {        
-      //dispatch(updateAlert('Name is required.'));
-      setAlert("Email is required");
-      return true;
-    }
-    if(!formData.role.length) {        
-      //dispatch(updateAlert('Name is required.'));
-      setAlert("Role is required");
-      return true;
-    }
-    
-    if(formData.password!=formData.confirm_password) {        
-      setAlert("Passwords is not matched.")
-      return true;
-    }
+
     return false;
   }
    
@@ -95,10 +58,10 @@ const Page = () => {
     
       try {
   
-        const res = await axios.post(`${BACKEND_URL}/api/users/`, formData);
+        const res = await axios.post(`${BACKEND_URL}/api/company/`, formData);
         
-      
-        router.push('/auth/login');
+        
+        router.push('/auth/register');
       } catch (err) {
  
         // console.log(err)
@@ -147,13 +110,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register
-              </Typography>
+                Register company
+              </Typography> 
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Already have an account?
+                Already registered an company?
                 &nbsp;
                 <Link
                   component={NextLink}
@@ -166,12 +129,12 @@ const Page = () => {
                 </Link>
                 <Link
                   component={NextLink}
-                  href="/auth/company"
+                  href="/auth/register"
                   underline="hover"
                   variant="subtitle2"
                   margin='10px'
                 >
-                  Register company
+                  Register
                 </Link>
               </Typography>
             </Stack>
@@ -196,75 +159,14 @@ const Page = () => {
                 //  error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                  // helperText={formik.touched.email && formik.errors.email}
-                  label="Email Address"
-                  name="email"
+                  label="Address"
+                  name="address"
                 //  onBlur={formik.handleBlur}
                   onChange={handleChange}
-                  type="email"
-                  value={formData.email}
+                  type="text"
+                  value={formData.address}
                 />
-                <InputLabel>Gender</InputLabel> 
-                <FormControl fullWidth margin="small">
-                  <Select   
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="Male">Male</MenuItem>
-                    <MenuItem value="Female">Female</MenuItem>
-                  </Select>
-                </FormControl>
-                <InputLabel>Company</InputLabel> 
-                <FormControl fullWidth margin="small">
-                  <Select   
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                  >
-                    {companies.map((company, index)=>{
-                      return <MenuItem key={index} value={company.name}>{company.name}</MenuItem>
-                    })}
-                    {/* 
-                    <MenuItem value="Female">Female</MenuItem> */}
-                  </Select>
-                </FormControl>
-                
-                <InputLabel>Role</InputLabel> 
-                <FormControl fullWidth margin="small">
-                  
-                  <Select   
-
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="Manager">Manager</MenuItem>
-                    <MenuItem value="Normal">Normal</MenuItem>
-                  </Select>
-                </FormControl>
-                <TextField
-                //  error={!!(formik.touched.password && formik.errors.password)}
-                  fullWidth
-                //  helperText={formik.touched.password && formik.errors.password}
-                  label="Password"
-                  name="password"
-                //  onBlur={formik.handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={formData.password}
-                />
-                <TextField
-                //  error={!!(formik.touched.password && formik.errors.password)}
-                  fullWidth
-                //  helperText={formik.touched.password && formik.errors.password}
-                  label="Confirm Password"
-                  name="confirm_password"
-                 // onBlur={formik.handleBlur}
-                  onChange={handleChange}
-                  type="password"
-                  value={formData.password_confirm}
-                />
+              
               </Stack>
               {/* {formik.errors.submit && (
                 <Typography
@@ -283,7 +185,7 @@ const Page = () => {
                 variant="contained"
                 onClick={handleRegister}
               >
-                Register
+                Register company
               </Button>
             </div>
           </div>

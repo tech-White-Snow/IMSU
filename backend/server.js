@@ -22,7 +22,7 @@ const swaggerOptions = {
         },
       ],
     },
-    apis: ['./server.js','./routes/api/users.js','./routes/api/customers.js','./routes/api/transaction.js'],
+    apis: ['./server.js','./routes/api/users.js','./routes/api/company.js','./routes/api/transaction.js'],
   };
   
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -50,7 +50,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/users',   require('./routes/api/users'));
 app.use('/api/customers',   require('./routes/api/customers'));
-app.use('/api/companys',   require('./routes/api/company'));
+app.use('/api/company',   require('./routes/api/company'));
 app.use('/api/transactions',   require('./routes/api/transaction'));
 
 const PORT = process.env.PORT || 5000;

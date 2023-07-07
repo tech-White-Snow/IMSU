@@ -56,8 +56,7 @@ const Page = () => {
           marginBottom: '10px'
         }}
       >
-        Microsoft
-        {/* {MyInfor.company}  */}
+        { MyInfor && MyInfor.company }
       </Typography>:''}
     
       <Container maxWidth="xl">

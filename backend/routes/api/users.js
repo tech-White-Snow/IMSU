@@ -28,7 +28,7 @@ const Customer = require('../../models/Customer')
 
 const schema = require('../../swagger/schema');
 
-//define swagger 's user schema
+//define swagger 's User schema
 /**
  * @swagger
  * components:
@@ -42,7 +42,7 @@ const schema = require('../../swagger/schema');
  *       properties:
  *         id:
  *           type: objecid
- *           description: The auto-generated id of the article
+ *           description: The auto-generated id of the user
  *         name:
  *           type: string
  *           description: name of user
@@ -71,7 +71,7 @@ const schema = require('../../swagger/schema');
  *         id: d5fE_asz
  *         name: Hans Flutter
  *         email: Admin@example.com
- *         gender: Femail
+ *         gender: Female
  *         role: Admin
  *         password: 123456
  */
@@ -90,7 +90,7 @@ const schema = require('../../swagger/schema');
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the article
+ *           description: The auto-generated id of the customer
  *         name:
  *           type: string
  *           description: name of customer
@@ -136,7 +136,7 @@ const schema = require('../../swagger/schema');
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the article
+ *           description: The auto-generated id of the transaction
  *         amount:
  *           type: string
  *           description: amount of transaction
@@ -208,6 +208,69 @@ router.get('/',
       res.status(500).send('Server Error')
     }
   })
+
+
+/**
+ * @swagger
+ * /api/users/{companyname}:
+ *   get:
+ *     summary: Retrieve a list of employees belonged to company named companyname
+ *     tags: [Employees]
+ *     parameters:
+ *       - in: path
+ *         name: companyname
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The company name
+ *     responses:
+ *       200:
+ *         description: A list of employees belonged to company
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *         
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ */
+//* method    GET
+//* route     api/users/:companyname
+//* desc      get all user
+//* access    Public
+router.get('/:companyname',
+  [],
+  async (req, res) => {
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors, })
+    }
+
+    try {
+
+      const employees = await User.find({company: req.params.companyname}).sort({_id:-1})
+
+
+      console.log(req.params)
+      res.json(employees);
+
+    } catch (err) {
+      console.error(err.message)
+      res.status(500).send('Server Error')
+    }
+  })
+
+
 
 
 /**
@@ -427,12 +490,11 @@ router.post('/login',
         return res.status(400).json({ errors: "Wrong email or password." })
       }
 
-      const employees = await User.find().sort({ _id: -1 })
-      const customers = await Customer.find().sort({ _id: -1 })
+      
+      const employees = await User.find({company: user.company}).sort({ _id: -1 })
       const transactions = await Transaction.find().sort({ _id: -1 })
       res.json({
         employees,
-        customers,
         transactions,
         myInfor: user
       })
@@ -553,7 +615,8 @@ router.put('/:id', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'user not found' });
     }
-    const employees = await User.find().sort({ _id: -1 });
+
+    const employees = await User.find({company: user1.company});
     return res.json(employees);
 
   } catch (error) {

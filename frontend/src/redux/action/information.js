@@ -6,6 +6,16 @@ export const addCustomers = (infor) => (dispatch) => {
         payload: infor
       });
   };
+
+  //add all customers
+export const addCustomer = (infor) => (dispatch) => {
+  // ...
+  dispatch({
+      type: 'ADD_CUSTOMER',
+      payload: infor
+    });
+};
+
   //delete customer
  export const deleteCustomer = (infor) => (dispatch) => {
     // ...

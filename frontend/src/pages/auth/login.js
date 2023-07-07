@@ -87,13 +87,29 @@ const Page = () => {
     try {
         const res = await axios.post(`${BACKEND_URL}/api/users/login`, formData);
         
-        const {employees, customers, transactions} = res.data;
+        const {employees,  transactions} = res.data;
         console.log(employees)
         dispatch(addEmployees(employees));
         console.log("employee")
 
-        dispatch(addCustomers(customers));
-        console.log("employee")
+        try {
+     
+          // console.log('object')
+           if(!res.data.myInfor) { 
+             dispatch(addCustomers([]));
+             return ;
+           }
+          // console.log('object')
+           const res = await axios.get(`${BACKEND_URL}/api/company/customer/${res.data.myInfor.company}`);
+       
+           const customer = res.data;
+           //console.log(customer)
+          // console.log(res)
+           dispatch(addCustomers(customer));
+         }
+         catch(err) {
+           if(!err) console.log(err);
+         };
 
         dispatch(addTransactions(transactions));
 
@@ -170,8 +186,18 @@ const Page = () => {
                   href="/auth/register"
                   underline="hover"
                   variant="subtitle2"
+                  margin='10px'
                 >
                   Register
+                </Link>
+                <Link
+                  component={NextLink}
+                  href="/auth/company"
+                  underline="hover"
+                  variant="subtitle2"
+                  margin='10px'
+                >
+                  Register company
                 </Link>
               </Typography>
             </Stack>

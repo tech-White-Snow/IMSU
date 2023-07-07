@@ -89,7 +89,7 @@ const Page = () => {
   //get employee's information
   useEffect(()=>{
     async function fetchData(){try {
-      const res = await axios.get(`${BACKEND_URL}/api/users`);
+      const res = await axios.get(`${BACKEND_URL}/api/users/${MyInfor.company}`);
       
       const employees = res.data;
       dispatch(addEmployees(employees))

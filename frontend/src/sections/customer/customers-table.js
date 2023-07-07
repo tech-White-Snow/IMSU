@@ -46,6 +46,7 @@ export const CustomersTable = (props) => {
 
   let MyInfor = JSON.parse(localStorage.getItem("user"));
 
+
   const dispatch = useDispatch();
   const handleModal=(action, customer, index)=>{
     let modal = {
@@ -69,11 +70,33 @@ export const CustomersTable = (props) => {
     //   });
     try {
 
-      const res = await axios.delete(`${BACKEND_URL}/api/customers/${index}`);
+      const reqBody = {
+        id: index,
+        companyname: MyInfor.company
+      }
+      const res = await axios.post(`${BACKEND_URL}/api/company/delcustomer/`, reqBody);
                   
-      console.log("object")
-      const employees = res.data;
-      dispatch(addCustomers(employees));
+     // console.log("object")
+      //const employees = res.data;
+      try {
+     
+        // console.log('object')
+         if(!MyInfor) { 
+         // dispatch
+           dispatch(addCustomers([]));
+           return ;
+         }
+        // console.log('object')
+         const res = await axios.get(`${BACKEND_URL}/api/company/customer/${MyInfor.company}`);
+     
+         const customer = res.data;
+         //console.log(customer)
+        // console.log(res)
+         dispatch(addCustomers(customer));
+       }
+       catch(err) {
+         if(!err) console.log(err);
+       };
     }
     catch(err) {
         if(!err) console.log(err);
@@ -109,12 +132,18 @@ export const CustomersTable = (props) => {
                   Location
                 </TableCell>
                 <TableCell>
+                  Company
+                </TableCell>
+                <TableCell>
+                  Role
+                </TableCell>
+                <TableCell>
                   Action
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer, index) => {
+              {(items&&items.length!=0)&&items.map((customer, index) => {
                 const isSelected = selected.includes(customer.id);
                 return (
                   <TableRow
@@ -154,6 +183,12 @@ export const CustomersTable = (props) => {
                     <TableCell>
                       {customer.address}
                     </TableCell>
+                    <TableCell>
+                      {customer.company}
+                    </TableCell>
+                    <TableCell>
+                      {customer.role}
+                    </TableCell>
                     <TableCell
                       style={{
                         paddingRight: "5px",
@@ -175,23 +210,7 @@ export const CustomersTable = (props) => {
                       >
                             View
                       </Button>
-                      { MyInfor!=null? MyInfor.role != "Normal" ? <Button
-                        variant="contained"
-                        sx={{
-                          display: 'inline-flex',
-                          height: 32,
-                          width: 0,
-                          padding: "5px"
-                        }}
-                        style={{
-                          padding: "0px",
-                          margin: "5px"
-                        }}
-                        onClick={()=>handleModal("update",customer, index+page*rowsPerPage)}
-                      >
-                            Update
-                      </Button>:"":''}
-                    { MyInfor!=null?MyInfor.role == "Admin" ? <Button
+                      {MyInfor!=null? MyInfor.role == "Admin" ? <Button
                         variant="contained"
                         sx={{
                           display: 'inline-flex',
@@ -207,6 +226,7 @@ export const CustomersTable = (props) => {
                       >
                             Delete
                       </Button>:"":''}
+                     
                     </TableCell>
                   </TableRow>
                 );

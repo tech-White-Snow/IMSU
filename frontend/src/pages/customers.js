@@ -4,7 +4,7 @@ import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, FormControl,Select,MenuItem, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { CustomersTable } from 'src/sections/customer/customers-table';
@@ -15,7 +15,7 @@ import CustomerModal from 'src/modal/customerModal';
 import { updateCustomer } from 'src/redux/action/modal';
 import { BACKEND_URL } from 'src/Constant';
 import axios from 'axios';
-import { addCustomers } from 'src/redux/action/information';
+import { addCustomer, addCustomers } from 'src/redux/action/information';
 
 const now = new Date();
 
@@ -76,29 +76,95 @@ const Page = () => {
 
   const {customer} = useSelector(state=>state.modal);
 
+  const [username, setUsername] = useState("");
+
+  const handleChange = (e) => setUsername(e.target.value);
+
+  const [users, setUsers] = useState([]);
+
+  async function fetchData(){
+    try {
+     
+   // console.log('object')
+    if(!MyInfor) { 
+      dispatch(addCustomers([]));
+      return ;
+    }
+   // console.log('object')
+    const res = await axios.get(`${BACKEND_URL}/api/company/customer/${MyInfor.company}`);
+
+    const customer = res.data;
+    //console.log(customer)
+   // console.log(res)
+    dispatch(addCustomers(customer));
+  }
+  catch(err) {
+    if(!err) console.log(err);
+  };}
+
+  const ifOurCustomer = (id) =>{
+    console.log(customers)
+    if(customers.length==0) return false;
+    let res = false;
+
+    console.log(id)
+    customers.map((u, index)=>{
+      if(u._id==id) res = true;
+    })
+
+    return res;
+  }
+
+  async function fetchUsers(){try {
+   // console.log('object')
+    const res = await axios.get(`${BACKEND_URL}/api/users/`);
+   // console.log(res)
+    let userss = [];
+    if(res.data.length) {
+      res.data.map((u, index)=>{
+        if(u.company!=MyInfor.company){
+          console.log(u._id)
+          const r = ifOurCustomer(u._id);
+          console.log(r)
+          if(!r)  {
+            userss = [
+              ...userss,
+              u
+            ]}
+        }
+      })
+    }
+
+    //console.log(userss)
+    setUsers(userss);
+  }
+  catch(err) {
+    if(!err) console.log(err);
+  };}
+
   //get customer's data every component called
   useEffect(()=>{
-    async function fetchData(){try {
-     
-      const res = await axios.get(`${BACKEND_URL}/api/customers`);
 
-      const customer = res.data;
-      dispatch(addCustomers(customer));
-    }
-    catch(err) {
-      if(!err) console.log(err);
-    };}
+    fetchUsers();
     fetchData();
   }, [])
 
   //callback function called by click add function : only admin can do
-  const handleAdd=()=>{
-    let cus = {
-      ...customer,
-      open: true,
-      text: 'add'
-    }
-    dispatch(updateCustomer(cus));
+  const handleAdd = async () => {
+    try {
+      // console.log('object')
+      const reqBody = {
+        customer_id: username,
+        companyname: MyInfor.company
+      }
+       const res = await axios.post(`${BACKEND_URL}/api/company/customer`, reqBody);
+       //console.log(res)
+       dispatch(addCustomer(res.data))
+     }
+     catch(err) {
+       if(!err) console.log(err);
+     };
+
   }
   
   //pagination function
@@ -151,17 +217,40 @@ const Page = () => {
                 </Stack>
               </Stack>
               <div>
-                {MyInfor!=null? MyInfor.role=="Admin" ? <Button
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  )}
-                  variant="contained"
-                  onClick={handleAdd}
-                >
-                  Add
-                </Button> : "" :''}
+                {MyInfor!=null&&MyInfor? MyInfor.role=="Admin" ? <div>
+                  <FormControl fullWidth 
+                    sx={{
+                      width: '300px',
+                      marginRight: '5px'
+                    }}
+                  >
+                    <Select   
+                      name="username"
+                      value={username}
+                      onChange={handleChange}
+                      onClick={fetchData}
+                      sx={{
+                        height: '43px'
+                      }}
+                    >
+                      {users.length&&users.map((user, index)=>{
+                        return <MenuItem key = {index} value={user._id}>{user.name}</MenuItem>
+                      })}
+                      {/* <MenuItem value="Male">Male</MenuItem>
+                      <MenuItem value="Female">Female</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                  <Button
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <PlusIcon />
+                      </SvgIcon>
+                    )}
+                    variant="contained"
+                    onClick={handleAdd}
+                  >
+                    Add
+                  </Button></div> : "" :''}
               </div>
             </Stack>
             {/* <CustomersSearch /> */}
